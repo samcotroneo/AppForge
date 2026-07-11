@@ -1,0 +1,41 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: night --default, business, cupcake;
+}
+
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  @apply min-h-screen bg-base-200 text-base-content;
+}
+
+#root {
+  @apply min-h-screen;
+}
+
+.app-shell {
+  @apply mx-auto flex min-h-screen max-w-[96rem] flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8;
+}
+
+.shell-grid {
+  @apply grid flex-1 gap-6 xl:grid-cols-[15rem_minmax(0,1fr)_18rem];
+}
+
+.app-grid {
+  @apply grid gap-6 xl:grid-cols-[1.1fr_0.9fr];
+}
+
+.metric-grid {
+  @apply grid gap-4 md:grid-cols-3;
+}
+
+.status-stack {
+  @apply space-y-4;
+}
+
+.section-copy {
+  @apply max-w-3xl text-sm leading-7 text-base-content/80;
+}

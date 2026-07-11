@@ -20,9 +20,9 @@ function SettingsScreen(props: SettingsScreenProps) {
   return (
     <div class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
       <SectionCard
-        eyebrow="Starter defaults"
-        title="Environment and delivery setup"
-        description="Keep product-level settings and readiness checks in a dedicated screen so integrations and native gaps are visible without hunting through docs."
+        eyebrow="Starter example"
+        title="Example environment and delivery setup"
+        description="This sample screen shows how config, readiness checks, and platform reminders can live in a dedicated setup area."
       >
         <div class="space-y-4">
           <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
@@ -34,7 +34,7 @@ function SettingsScreen(props: SettingsScreenProps) {
                   {props.foundation.envSummary.totalRequiredCount}
                 </p>
                 <p class="mt-1 text-sm text-[#8a8c93]">
-                  Required public settings configured for live service wiring.
+                  Example public settings surfaced from the starter env layer.
                 </p>
               </div>
               <span
@@ -128,13 +128,13 @@ function SettingsScreen(props: SettingsScreenProps) {
 
       <div class="space-y-6">
         <SectionCard
-          eyebrow="Platform status"
-          title="Native packaging still needs real targets"
-          description="Capacitor and PWA support are wired, but product teams still need to add their platform projects and service contracts."
+          eyebrow="Platform example"
+          title="Sample native setup reminders"
+          description="Capacitor and PWA support are wired, and this card shows the kind of platform guidance a real app might surface."
         >
           <ErrorState
-            title="Platform adapters are defined before native projects exist"
-            description="Run the Capacitor platform add flows when the product identity is final so Android and iOS delivery can be validated alongside the web build."
+            title="Example native setup warning"
+            description="Use reminders like this to point developers toward the platform steps that still need real app-specific work."
           >
             <div class="flex flex-wrap gap-2 text-xs text-[#8a8c93]">
               <span class="rounded px-2 py-0.5 font-mono" style="background: rgba(58,60,66,0.4); color: #8a8c93; border: 1px solid #3a3c42;">
@@ -160,13 +160,13 @@ function SettingsScreen(props: SettingsScreenProps) {
         </SectionCard>
 
         <SectionCard
-          eyebrow="Operational signal"
-          title="Current app-wide signals"
-          description="Surface bootstrap notices, adapter counts, and delivery blockers so setup work stays visible during product planning."
+          eyebrow="Signals example"
+          title="Sample app-wide signals"
+          description="These cards demonstrate how shared notices, adapter counts, and setup blockers can stay visible outside feature routes."
         >
           <div class="space-y-4">
             <div class="rounded-md border border-[#3a3c42] bg-[#26272c] p-5">
-              <p class="text-sm text-[#8a8c93]">Blocked tasks carried by the reference feature</p>
+              <p class="text-sm text-[#8a8c93]">Blocked sample tasks</p>
               <p class="mt-3 text-4xl font-black text-[#a83818]">{props.blockedTaskCount}</p>
               <p class="mt-2 text-sm text-[#8a8c93]">
                 {props.foundation.envSummary.missingRequiredKeys.length > 0
@@ -175,7 +175,7 @@ function SettingsScreen(props: SettingsScreenProps) {
               </p>
             </div>
             <div class="rounded-md border border-[#3a3c42] bg-[#26272c] p-5">
-              <p class="text-sm text-[#8a8c93]">Foundation coverage</p>
+              <p class="text-sm text-[#8a8c93]">Starter coverage</p>
               <p class="mt-3 text-4xl font-black text-[#e06818]">
                 {props.portfolioProjectCount + props.foundation.dataBoundary.adapters.length}
               </p>
@@ -184,7 +184,7 @@ function SettingsScreen(props: SettingsScreenProps) {
               </p>
             </div>
             <div class="rounded-md border border-[#3a3c42] bg-[#26272c] p-5">
-              <p class="text-sm text-[#8a8c93]">App-wide notices</p>
+              <p class="text-sm text-[#8a8c93]">Sample notices</p>
               <p class="mt-3 text-4xl font-black text-[#f8df66]">{props.foundation.feedback.items.length}</p>
               <div class="mt-3 space-y-2 text-sm text-[#8a8c93]">
                 {props.foundation.feedback.items.map((item) => (

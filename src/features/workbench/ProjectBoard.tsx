@@ -52,8 +52,8 @@ function ProjectBoard(props: ProjectBoardProps) {
       <section class="space-y-4 rounded-lg border border-[#3a3c42] bg-[#1a1b20] p-5 shadow-md">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#d6a960]">Reference feature</p>
-            <h3 class="mt-2 text-xl font-bold text-[#f2f0ea]">Project workspace</h3>
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#d6a960]">Example feature</p>
+            <h3 class="mt-2 text-xl font-bold text-[#f2f0ea]">Sample project board</h3>
           </div>
           <div class="flex flex-wrap gap-1">
             <For each={filters}>
@@ -115,7 +115,7 @@ function ProjectBoard(props: ProjectBoardProps) {
         {visibleProjects().length === 0 ? (
           <EmptyState
             title="No projects match this workflow view"
-            description="Use this section for filtered lists, saved views, and team-specific queues without changing the route shell."
+            description="Use this section to demonstrate filtered lists, saved views, and team-specific queues without changing the route shell."
           />
         ) : null}
       </section>
@@ -126,7 +126,7 @@ function ProjectBoard(props: ProjectBoardProps) {
             <>
               <div class="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#d6a960]">Selected project</p>
+                  <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#d6a960]">Selected sample</p>
                   <h3 class="mt-2 text-2xl font-bold text-[#f2f0ea]">{selectedProject()!.name}</h3>
                 </div>
                 <span
@@ -169,15 +169,15 @@ function ProjectBoard(props: ProjectBoardProps) {
             </>
           ) : (
             <EmptyState
-              title="Select a project to inspect the slice"
+              title="Select a sample project to inspect the slice"
               description="A starter should make room for project detail panels, modal entry points, and status-driven workflows."
             />
           )}
         </section>
 
         <section class="rounded-lg border border-[#3a3c42] bg-[#1a1b20] p-5 shadow-md">
-          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#d6a960]">Data boundary</p>
-          <h3 class="mt-2 text-xl font-bold text-[#f2f0ea]">Connected data sources</h3>
+          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#d6a960]">Starter seam</p>
+          <h3 class="mt-2 text-xl font-bold text-[#f2f0ea]">Example data sources</h3>
           <div class="mt-4 space-y-3">
             <For each={props.dataBoundary.adapters}>
               {(adapter) => (
@@ -226,7 +226,7 @@ function ProjectBoard(props: ProjectBoardProps) {
           </div>
           <div class="mt-4">
             <EmptyState
-              title="Adapters are defined before product services exist"
+              title="Adapters are starter examples until product services exist"
               description="Use these seams for real API clients, repositories, and sync orchestration instead of wiring transport logic directly into feature views."
             />
           </div>

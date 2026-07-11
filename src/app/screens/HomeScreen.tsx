@@ -35,15 +35,16 @@ function HomeScreen(props: HomeScreenProps) {
                   class="rounded px-2 py-0.5 text-xs font-semibold uppercase tracking-[0.25em]"
                   style="background: rgba(224,104,24,0.15); color: #e06818; border: 1px solid rgba(224,104,24,0.3);"
                 >
-                  Working starter shell
+                  Sample app
                 </span>
               </div>
               <h1 class="text-4xl font-black tracking-tight text-[#f2f0ea] sm:text-5xl">
-                Ship a real first slice instead of starting from a template landing page.
+                Explore the AppForge starter structure with example routes, sample data, and replaceable scaffolding.
               </h1>
               <p class="section-copy text-base text-[#8a8c93]">
-                This shell is designed to hold routes, shared states, and feature slices from day one: a
-                dashboard, a reference workspace, and settings that surface delivery gaps early.
+                This sample app demonstrates how an AppForge project can be organized: an overview
+                route, an example feature slice, and starter setup surfaces that are meant to be
+                replaced by your own product logic.
               </p>
             </div>
             <div class="flex flex-wrap gap-3">
@@ -53,7 +54,7 @@ function HomeScreen(props: HomeScreenProps) {
                 style="background: #e06818; color: #f2f0ea;"
                 onClick={props.onOpenWorkspace}
               >
-                Open workspace
+                View example workspace
               </button>
               <button
                 type="button"
@@ -61,7 +62,7 @@ function HomeScreen(props: HomeScreenProps) {
                 style="background: rgba(255,255,255,0.06); color: #f2f0ea; border: 1px solid #3a3c42;"
                 onClick={props.onOpenSettings}
               >
-                Review setup
+                Inspect starter setup
               </button>
             </div>
           </div>
@@ -71,39 +72,39 @@ function HomeScreen(props: HomeScreenProps) {
       {/* Metric cards */}
       <section class="metric-grid">
         <article class="rounded-lg border border-[#3a3c42] bg-[#1a1b20] p-5 shadow-md">
-          <p class="text-sm text-[#8a8c93]">Active slices</p>
+          <p class="text-sm text-[#8a8c93]">Example slices</p>
           <p class="mt-3 text-3xl font-black text-[#e06818]">{props.summary.active}</p>
-          <p class="mt-2 text-sm text-[#8a8c93]">Work ready for implementation and integration.</p>
+          <p class="mt-2 text-sm text-[#8a8c93]">Starter examples you can swap for real feature areas.</p>
         </article>
         <article class="rounded-lg border border-[#3a3c42] bg-[#1a1b20] p-5 shadow-md">
-          <p class="text-sm text-[#8a8c93]">Draft ideas</p>
+          <p class="text-sm text-[#8a8c93]">Sample concepts</p>
           <p class="mt-3 text-3xl font-black text-[#d6a960]">{props.summary.draft}</p>
-          <p class="mt-2 text-sm text-[#8a8c93]">Candidate product bets still shaping their contracts.</p>
+          <p class="mt-2 text-sm text-[#8a8c93]">Placeholder examples for work that is still taking shape.</p>
         </article>
         <article class="rounded-lg border border-[#3a3c42] bg-[#1a1b20] p-5 shadow-md">
-          <p class="text-sm text-[#8a8c93]">Blocked items</p>
+          <p class="text-sm text-[#8a8c93]">Example blockers</p>
           <p class="mt-3 text-3xl font-black text-[#a83818]">{props.summary.blocked}</p>
-          <p class="mt-2 text-sm text-[#8a8c93]">Dependencies worth exposing early in the starter shell.</p>
+          <p class="mt-2 text-sm text-[#8a8c93]">Sample blockers that demonstrate how dependency states can surface.</p>
         </article>
         <article class="rounded-lg border border-[#3a3c42] bg-[#1a1b20] p-5 shadow-md">
           <p class="text-sm text-[#8a8c93]">Shared foundations</p>
           <p class="mt-3 text-3xl font-black text-[#f8df66]">{props.foundationCount}</p>
           <p class="mt-2 text-sm text-[#8a8c93]">
-            Bootstrap, data, feedback, and design contracts ready for downstream apps.
+            Starter bootstrap, data, feedback, and design seams ready to adapt.
           </p>
         </article>
         <article class="rounded-lg border border-[#3a3c42] bg-[#1a1b20] p-5 shadow-md">
-          <p class="text-sm text-[#8a8c93]">App-wide notices</p>
+          <p class="text-sm text-[#8a8c93]">Sample notices</p>
           <p class="mt-3 text-3xl font-black text-[#f8df66]">{props.feedbackCount}</p>
-          <p class="mt-2 text-sm text-[#8a8c93]">Startup and configuration cues stay visible outside feature routes.</p>
+          <p class="mt-2 text-sm text-[#8a8c93]">Example startup and configuration cues outside feature routes.</p>
         </article>
       </section>
 
       <div class="app-grid">
         <SectionCard
-          eyebrow="Recent items"
-          title="Projects updated most recently"
-          description="Recent activity belongs near the dashboard so every product that forks this starter inherits useful momentum cues."
+          eyebrow="Example content"
+          title="Sample projects included with the starter"
+          description="These are illustrative entries to show card layout, status handling, and summary copy. Replace or remove them when your app takes shape."
         >
           <div class="space-y-3">
             <For each={recentProjects()}>
@@ -129,9 +130,9 @@ function HomeScreen(props: HomeScreenProps) {
         </SectionCard>
 
         <SectionCard
-          eyebrow="Onboarding cue"
-          title="Replace the placeholders in this order"
-          description="The starter should make the first production steps obvious, especially before native packaging or service integration begins."
+          eyebrow="Starter checklist"
+          title="Replace these sample placeholders first"
+          description="Use this checklist as example starter content that points developers toward the first real integration steps."
         >
           <div class="space-y-3">
             <For each={props.checklist}>

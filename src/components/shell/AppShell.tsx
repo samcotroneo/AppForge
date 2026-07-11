@@ -32,9 +32,9 @@ function AppShell(props: AppShellProps) {
             <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#d6a960]">
               AppForge
             </p>
-            <h1 class="text-lg font-bold text-[#f2f0ea]">Production starter shell</h1>
+            <h1 class="text-lg font-bold text-[#f2f0ea]">Starter sample app</h1>
             <p class="mt-0.5 text-sm text-[#8a8c93]">
-              Real routes, starter states, and space for app-level signals.
+              Example routes, sample state, and starter surfaces you can replace with your own app.
             </p>
           </div>
           <div class="flex flex-wrap gap-2">
@@ -51,27 +51,35 @@ function AppShell(props: AppShellProps) {
             <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#d6a960]">
               Navigation
             </p>
-            <h2 class="mt-2 text-lg font-bold text-[#f2f0ea]">Starter routes</h2>
+            <h2 class="mt-2 text-lg font-bold text-[#f2f0ea]">Sample routes</h2>
           </div>
           <nav class="space-y-2">
             <For each={props.navItems}>
               {(item) => (
-                <button
-                  type="button"
-                  class={`w-full rounded-md border p-4 text-left transition ${
-                    props.activeRoute === item.id
-                      ? 'border-[#e06818] bg-[#e06818]/10 shadow-sm'
-                      : 'border-[#3a3c42] bg-[#26272c] hover:border-[#e06818]/40 hover:bg-[#26272c]/80'
+                <div
+                  class={`w-full ${
+                    props.activeRoute === item.id ? 'aura aura-gold aura-sm text-warning' : ''
                   }`}
-                  onClick={() => props.onNavigate(item.id)}
                 >
-                  <div
-                    class={`font-semibold ${props.activeRoute === item.id ? 'text-[#e06818]' : 'text-[#f2f0ea]'}`}
+                  <button
+                    type="button"
+                    class={`w-full rounded-md border p-4 text-left transition ${
+                      props.activeRoute === item.id
+                        ? 'border-[#3a3c42] bg-[#1a1b20]'
+                        : 'border-[#3a3c42] bg-[#26272c] hover:border-[#e06818]/40 hover:bg-[#26272c]/80'
+                    }`}
+                    onClick={() => props.onNavigate(item.id)}
                   >
-                    {item.label}
-                  </div>
-                  <p class="mt-2 text-sm leading-6 text-[#8a8c93]">{item.description}</p>
-                </button>
+                    <div
+                      class={`font-semibold ${
+                        props.activeRoute === item.id ? 'text-warning' : 'text-[#f2f0ea]'
+                      }`}
+                    >
+                      {item.label}
+                    </div>
+                    <p class="mt-2 text-sm leading-6 text-[#8a8c93]">{item.description}</p>
+                  </button>
+                </div>
               )}
             </For>
           </nav>
@@ -84,9 +92,9 @@ function AppShell(props: AppShellProps) {
             <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#d6a960]">
               App status
             </p>
-            <h2 class="mt-2 text-lg font-bold text-[#f2f0ea]">Shared signals</h2>
+            <h2 class="mt-2 text-lg font-bold text-[#f2f0ea]">Starter signals</h2>
             <p class="mt-2 text-sm leading-6 text-[#8a8c93]">
-              Keep setup checks, delivery cues, and app-wide notifications out of route components.
+              Example setup checks, delivery cues, and shared notifications for an AppForge-based app.
             </p>
           </div>
           {props.statusContent}

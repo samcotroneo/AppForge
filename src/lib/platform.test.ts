@@ -1,9 +1,20 @@
 import { describe, expect, it } from 'vitest'
-import { createCapacitorId, getLaunchTargets, getPlatformCapabilities } from './platform'
+import {
+  createCapacitorId,
+  describeNativeTargetPreset,
+  getLaunchTargets,
+  getLaunchTargetsForPreset,
+  getPlatformCapabilities,
+} from './platform'
 
 describe('platform helpers', () => {
   it('returns web and native targets when requested', () => {
     expect(getLaunchTargets(true)).toEqual(['web', 'android', 'ios'])
+  })
+
+  it('returns launch targets for a native preset', () => {
+    expect(getLaunchTargetsForPreset('android')).toEqual(['web', 'android'])
+    expect(describeNativeTargetPreset('android-ios')).toBe('Android + iOS')
   })
 
   it('creates a stable capacitor id from a slug', () => {

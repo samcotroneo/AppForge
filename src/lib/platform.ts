@@ -1,4 +1,5 @@
 export type LaunchTarget = 'web' | 'android' | 'ios'
+export type NativeTargetPreset = 'web' | 'android' | 'ios' | 'android-ios'
 export type PlatformCapability = {
   key: string
   label: string
@@ -15,6 +16,32 @@ export type PlatformCapabilities = {
 
 export function getLaunchTargets(includeNative: boolean): LaunchTarget[] {
   return includeNative ? ['web', 'android', 'ios'] : ['web']
+}
+
+export function getLaunchTargetsForPreset(preset: NativeTargetPreset): LaunchTarget[] {
+  switch (preset) {
+    case 'web':
+      return ['web']
+    case 'android':
+      return ['web', 'android']
+    case 'ios':
+      return ['web', 'ios']
+    case 'android-ios':
+      return ['web', 'android', 'ios']
+  }
+}
+
+export function describeNativeTargetPreset(preset: NativeTargetPreset): string {
+  switch (preset) {
+    case 'web':
+      return 'Web only'
+    case 'android':
+      return 'Android only'
+    case 'ios':
+      return 'iOS only'
+    case 'android-ios':
+      return 'Android + iOS'
+  }
 }
 
 export function createCapacitorId(slug: string): string {

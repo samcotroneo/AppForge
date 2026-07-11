@@ -28,4 +28,7 @@ Use sub-agents when a change naturally decomposes into parallel tracks with low 
 - Keep `src/app` ownership with the main integrator when possible.
 - Delegate within `src/features/<feature-name>` for the cleanest merge boundaries.
 - Put native or PWA-specific changes behind `src/lib` so platform concerns do not leak into UI composition.
+- Treat `src/features/bootstrap/starterContract.ts` as the canonical base-app contract for fresh-repo bootstraps.
+- Treat `appforge.config.json` as the generated bootstrap record for native target selection.
 - Treat `README.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` as shared contracts that should be updated whenever architecture expectations change.
+- When a fresh repo asks to build on AppForge, run `npx @samcotroneo/appforge init` (use `--targets` in automation if needed), read the starter contract first, then specialize the sample app instead of rewriting the shell from scratch.

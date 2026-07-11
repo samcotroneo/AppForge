@@ -1,5 +1,6 @@
 import { For } from 'solid-js'
 import SectionCard from '../../components/ui/SectionCard'
+import StarterContractCard from '../../features/bootstrap/StarterContractCard'
 import type { OnboardingItem, PortfolioSummary, WorkspaceProject } from '../../features/workbench/workspaceData'
 import { getRecentProjects } from '../../features/workbench/workspaceData'
 
@@ -68,6 +69,8 @@ function HomeScreen(props: HomeScreenProps) {
           </div>
         </div>
       </section>
+
+      <StarterContractCard />
 
       {/* Metric cards */}
       <section class="metric-grid">

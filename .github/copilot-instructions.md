@@ -13,6 +13,12 @@
 - `src/components`: reusable presentational building blocks
 - `src/features`: domain features with colocated types and helpers
 - `src/lib`: shared utilities and platform adapters
+- `src/features/bootstrap/starterContract.ts`: machine-readable summary of the base app and fresh-repo sequence
+
+## Bootstrap workflow
+- Use `npx @samcotroneo/appforge init` to pull the starter into a fresh repo before specializing the app.
+- Use `--targets` when you need to skip the interactive native target prompt in automation.
+- The init flow asks which native targets to prepare and writes `appforge.config.json` so the choice is easy to recover later.
 
 ## Coding expectations
 - Keep SolidJS components small and composable.

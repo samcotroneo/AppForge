@@ -10,6 +10,7 @@ The folder is intentionally independent from `dinnerbrain-app` so it can be prom
 - A feature-first layout under `src/app`, `src/components`, `src/features`, and `src/lib`
 - Shared loading, empty, and error states for future product slices
 - A reference workspace feature that demonstrates route composition and domain-specific UI boundaries
+- A machine-readable starter contract for fresh-repo bootstraps
 - Capacitor configuration targeting `dist/`
 - `vite-plugin-pwa` with installable manifest and generated service worker
 - Lint, unit test, and build scripts for automation and CI
@@ -18,10 +19,14 @@ The folder is intentionally independent from `dinnerbrain-app` so it can be prom
 ## Quick start
 
 ```bash
-cd /home/runner/work/Dinnerbrain/Dinnerbrain/appforge
+npx @samcotroneo/appforge init my-app
+cd my-app
 npm install
 npm run dev
 ```
+
+The init command will ask which native targets to prepare and will write `appforge.config.json` in the new repo so the selection is recorded.
+Use `--targets` if you want to skip the prompt in automation.
 
 ## Validation
 
@@ -30,6 +35,17 @@ npm run lint
 npm run test:unit
 npm run build
 ```
+
+## Fresh repo workflow
+
+When a new repo says, "Build X app using the AppForge sample as a base," start with the starter contract and shared guidance:
+
+1. Run `npx @samcotroneo/appforge init` in the fresh repo to copy in the starter.
+2. Choose the native target preset when prompted, then confirm `appforge.config.json` was written.
+3. Read `src/features/bootstrap/starterContract.ts`, `README.md`, `docs/agent-workflows.md`, `CLAUDE.md`, and `.github/copilot-instructions.md`.
+4. Keep the AppForge shell as the base until the new product's routes and features are ready to replace it.
+5. Specialize the sample app behind `src/app`, `src/features`, and `src/lib` boundaries instead of scattering product logic across the shell.
+6. Run lint, unit tests, build, and native sync before handing the repo back.
 
 ## Runtime configuration
 
@@ -73,6 +89,10 @@ npx cap open android
 npx cap open ios
 ```
 
+## Release and publishing
+
+If you want to publish AppForge as a versioned package, see `docs/releasing.md` for the npm release flow and semver versioning.
+
 ## Starter structure
 
 ```text
@@ -81,7 +101,8 @@ appforge/
 ├── CLAUDE.md
 ├── capacitor.config.ts
 ├── docs/
-│   └── agent-workflows.md
+│   ├── agent-workflows.md
+│   └── releasing.md
 ├── public/
 │   ├── favicon.svg
 │   └── icons/
@@ -94,6 +115,7 @@ appforge/
 │   │   ├── shell/
 │   │   └── ui/
 │   ├── features/
+│   │   ├── bootstrap/
 │   │   └── workbench/
 │   ├── lib/
 │   ├── manifest.ts
@@ -122,8 +144,9 @@ appforge/
 
 ## Moving this folder into its own repository
 
-1. Copy `appforge/` into a new repository root.
-2. Run `npm install`.
-3. Update package metadata, app name, Capacitor IDs, and PWA manifest values.
-4. Add native platforms with `npx cap add android` and/or `npx cap add ios`.
-5. Replace the seeded workspace data with your first real feature service and product screens.
+1. Create a fresh repository root.
+2. Run `npx @samcotroneo/appforge init`.
+3. Choose the target preset and let the CLI write `appforge.config.json`.
+4. Update package metadata, app name, Capacitor IDs, and PWA manifest values.
+5. Add native platforms with `npx cap add android` and/or `npx cap add ios`.
+6. Replace the seeded workspace data with your first real feature service and product screens.

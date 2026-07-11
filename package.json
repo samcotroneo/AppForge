@@ -1,9 +1,33 @@
 {
-  "name": "appforge-template",
-  "private": true,
+  "name": "@samcotroneo/appforge",
+  "private": false,
   "version": "0.1.0",
   "description": "Agent-friendly Capacitor + SolidJS + Tailwind + DaisyUI PWA template.",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "appforge": "./bin/appforge.js"
+  },
+  "files": [
+    "bin",
+    ".github",
+    ".gitignore",
+    "CLAUDE.md",
+    "README.md",
+    "capacitor.config.ts",
+    "docs",
+    "eslint.config.js",
+    "index.html",
+    "package-lock.json",
+    "public",
+    "src",
+    "tsconfig.app.json",
+    "tsconfig.json",
+    "tsconfig.node.json",
+    "vite.config.ts"
+  ],
   "scripts": {
     "dev": "vite",
     "start": "vite",
@@ -12,6 +36,7 @@
     "lint": "eslint . --max-warnings=0",
     "test": "vitest",
     "test:unit": "vitest run --reporter dot --run",
+    "prepublishOnly": "npm run lint && npm run test:unit && npm run build",
     "cap:sync": "npm run build && npx cap sync"
   },
   "dependencies": {

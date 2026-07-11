@@ -11,10 +11,11 @@ Use this repository as an app-builder template for production-minded Capacitor P
 - Favor DaisyUI semantic components first, then Tailwind utilities for layout polish.
 
 ## Implementation workflow
-1. Read `README.md` and `docs/agent-workflows.md` before making structural changes.
+1. Read `README.md`, `docs/agent-workflows.md`, and `src/features/bootstrap/starterContract.ts` before making structural changes.
 2. Add new user-facing capabilities inside a dedicated feature folder.
 3. Reuse shared shell and section components before introducing new layout primitives.
 4. Validate with `npm run lint`, `npm run test:unit`, and `npm run build` before finalizing.
+5. When bootstrapping a fresh repo, record the native target choice in `appforge.config.json` and respect the `npx @samcotroneo/appforge init` prompt or `--targets` flag.
 
 ## Sub-agent delegation
 - Use research/explore agents for plugin selection, native integration trade-offs, and multi-file discovery.

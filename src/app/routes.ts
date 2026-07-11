@@ -9,18 +9,18 @@ export type AppRouteDefinition = {
 export const appRoutes: AppRouteDefinition[] = [
   {
     id: 'home',
-    label: 'Dashboard',
-    description: 'Starter overview, recent activity, and onboarding guidance.',
+    label: 'Overview',
+    description: 'Starter summary, example content, and onboarding guidance.',
   },
   {
     id: 'workspace',
     label: 'Workspace',
-    description: 'Reference feature showing how product slices can be composed.',
+    description: 'Example feature slice showing how AppForge structure can be composed.',
   },
   {
     id: 'settings',
     label: 'Settings',
-    description: 'Environment setup, delivery defaults, and platform readiness.',
+    description: 'Example setup surfaces for config, delivery defaults, and platform readiness.',
   },
 ]
 

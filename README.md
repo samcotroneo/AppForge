@@ -2,8 +2,6 @@
 
 AppForge is a self-contained starter for building production-minded cross-platform apps with **Vite**, **SolidJS + TSX**, **Tailwind CSS**, **DaisyUI**, **Capacitor**, and **PWA** defaults.
 
-The folder is intentionally independent from `dinnerbrain-app` so it can be promoted into its own repository later with minimal cleanup.
-
 ## What this starter includes
 
 - A working app shell with dashboard, workspace, and settings screen structure

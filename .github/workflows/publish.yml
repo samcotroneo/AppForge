@@ -37,7 +37,7 @@ jobs:
       - name: Verify npm auth token
         run: |
           if [ -z "${NPM_TOKEN}" ]; then
-            echo "NPM_TOKEN is not configured. Add it to repository secrets before publishing."
+            echo "NPM_TOKEN secret is not configured. Add it to repository secrets so NODE_AUTH_TOKEN can be set for npm publish."
             exit 1
           fi
         env:

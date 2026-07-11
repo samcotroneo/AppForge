@@ -60,44 +60,44 @@ function App() {
 
   const statusContent = (
     <div class="status-stack">
-      <article class="rounded-box border border-base-300 bg-base-200/70 p-4">
-        <p class="text-sm text-base-content/70">Current route</p>
-        <h3 class="mt-2 text-lg font-semibold">{routeMeta().label}</h3>
-        <p class="mt-2 text-sm leading-6 text-base-content/75">{routeMeta().description}</p>
+      <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
+        <p class="text-sm text-[#8a8c93]">Current route</p>
+        <h3 class="mt-2 text-lg font-semibold text-[#f2f0ea]">{routeMeta().label}</h3>
+        <p class="mt-2 text-sm leading-6 text-[#8a8c93]">{routeMeta().description}</p>
       </article>
-      <article class="rounded-box border border-base-300 bg-base-200/70 p-4">
-        <p class="text-sm text-base-content/70">Bootstrap boundary</p>
+      <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
+        <p class="text-sm text-[#8a8c93]">Bootstrap boundary</p>
         <div class="mt-3 flex items-end justify-between gap-3">
-          <span class="text-3xl font-black text-primary">{statusContext()?.routePolicy.mode ?? '—'}</span>
-          <span class="text-sm text-base-content/75">route policy with back-button support</span>
+          <span class="text-3xl font-black text-[#e06818]">{statusContext()?.routePolicy.mode ?? '—'}</span>
+          <span class="text-sm text-[#8a8c93]">route policy with back-button support</span>
         </div>
       </article>
-      <article class="rounded-box border border-base-300 bg-base-200/70 p-4">
-        <p class="text-sm text-base-content/70">Persistence + session</p>
-        <p class="mt-3 text-3xl font-black text-secondary">{statusContext()?.persistence.policy.driver ?? '—'}</p>
-        <p class="mt-2 text-sm text-base-content/75">
+      <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
+        <p class="text-sm text-[#8a8c93]">Persistence + session</p>
+        <p class="mt-3 text-3xl font-black text-[#d6a960]">{statusContext()?.persistence.policy.driver ?? '—'}</p>
+        <p class="mt-2 text-sm text-[#8a8c93]">
           {statusContext()?.session.current.status ?? 'anonymous'} session restored on boot.
         </p>
       </article>
-      <article class="rounded-box border border-base-300 bg-base-200/70 p-4">
-        <p class="text-sm text-base-content/70">Runtime config</p>
-        <p class="mt-3 text-3xl font-black text-secondary">
+      <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
+        <p class="text-sm text-[#8a8c93]">Runtime config</p>
+        <p class="mt-3 text-3xl font-black text-[#d6a960]">
           {statusContext()?.envSummary.configuredRequiredCount ?? 0}/
           {statusContext()?.envSummary.totalRequiredCount ?? 0}
         </p>
-        <p class="mt-2 text-sm text-base-content/75">Required public settings configured.</p>
+        <p class="mt-2 text-sm text-[#8a8c93]">Required public settings configured.</p>
       </article>
-      <article class="rounded-box border border-base-300 bg-base-200/70 p-4">
-        <p class="text-sm text-base-content/70">Data + observability</p>
-        <p class="mt-3 text-3xl font-black text-accent">{statusContext()?.dataBoundary.adapters.length ?? 0}</p>
-        <p class="mt-2 text-sm text-base-content/75">
+      <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
+        <p class="text-sm text-[#8a8c93]">Data + observability</p>
+        <p class="mt-3 text-3xl font-black text-[#f8df66]">{statusContext()?.dataBoundary.adapters.length ?? 0}</p>
+        <p class="mt-2 text-sm text-[#8a8c93]">
           {statusContext()?.observability.sinks.length ?? 0} sink definitions, {blockedTasks().length} blocked starter tasks.
         </p>
       </article>
-      <article class="rounded-box border border-base-300 bg-base-200/70 p-4">
-        <p class="text-sm text-base-content/70">App feedback</p>
-        <p class="mt-3 text-3xl font-black text-warning">{statusContext()?.feedback.items.length ?? 0}</p>
-        <p class="mt-2 text-sm text-base-content/75">Shared notices for startup, config, and release readiness.</p>
+      <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
+        <p class="text-sm text-[#8a8c93]">App feedback</p>
+        <p class="mt-3 text-3xl font-black text-[#f8df66]">{statusContext()?.feedback.items.length ?? 0}</p>
+        <p class="mt-2 text-sm text-[#8a8c93]">Shared notices for startup, config, and release readiness.</p>
       </article>
     </div>
   )

@@ -34,16 +34,5 @@ jobs:
       - name: Run checks
         run: npm run lint && npm run test:unit && npm run build
 
-      - name: Verify npm auth token
-        run: |
-          if [ -z "${NPM_TOKEN}" ]; then
-            echo "NPM_TOKEN secret is not configured. Add it to repository secrets so NODE_AUTH_TOKEN can be set for npm publish."
-            exit 1
-          fi
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Publish to npm
         run: npm publish --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

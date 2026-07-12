@@ -72,7 +72,7 @@ If you automate publishing in GitHub Actions:
 
 - use a manual `workflow_dispatch` release workflow instead of publishing on every push to `main`
 - run the same validation steps first
-- use `NODE_AUTH_TOKEN` from an npm automation token secret
+- prefer npm Trusted Publishing (GitHub Actions OIDC) so no npm token secret is required
 - publish from a deliberately chosen ref or version bump
 - keep `prepublishOnly` in `package.json` so accidental publishes still get blocked if validation fails
 

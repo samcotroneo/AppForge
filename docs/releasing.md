@@ -46,35 +46,34 @@ Prefer `npm version` so npm creates the tag and updates `package.json` in one st
    npm run build
    ```
 
-2. Bump the version:
+2. Create and push a semver tag — the CI pipeline handles the rest:
 
    ```bash
-   npm version patch
-   # or: npm version minor
-   # or: npm version major
+   git tag v1.2.3
+   git push origin v1.2.3
    ```
 
-3. Publish:
+   The publish workflow fires on any tag matching `v*.*.*`, strips the `v` prefix, syncs `package.json`, runs the full validation suite, and publishes to npm.
+
+3. *(Optional)* If you also want the version reflected in the commit, bump it locally first:
 
    ```bash
-   npm publish
-   ```
-
-4. Push the version commit and tag:
-
-   ```bash
+   npm version patch   # or minor / major
    git push --follow-tags
    ```
+
+   `npm version` updates `package.json`, commits it, and creates the tag in one step.
 
 ## CI recommendations
 
 If you automate publishing in GitHub Actions:
 
-- use a manual `workflow_dispatch` release workflow instead of publishing on every push to `main`
+- push a semver tag (`v1.2.3`) to trigger the publish workflow automatically
+- the workflow extracts the version from the tag and syncs it into `package.json` before publishing, so the npm release always matches the tag
+- a `workflow_dispatch` trigger is still available for manual runs when you need to publish from a specific ref without tagging
 - run the same validation steps first
-- prefer npm Trusted Publishing (GitHub Actions OIDC) so no npm token secret is required
-- publish from a deliberately chosen ref or version bump
-- keep `prepublishOnly` in `package.json` so accidental publishes still get blocked if validation fails
+- use npm Trusted Publishing (OIDC) so no `NPM_TOKEN` secret is required
+- keep `prepublishOnly` in `package.json` so accidental local publishes still get blocked if validation fails
 
 ## Notes
 

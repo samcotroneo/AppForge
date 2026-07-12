@@ -30,7 +30,7 @@ export const starterContract: StarterContract = {
   layers: [
     {
       title: 'Base app shell',
-      detail: 'The existing SolidJS route tree, shell layout, and starter screens are the canonical app foundation.',
+      detail: 'The existing Ionic React route tree, shell layout, and starter screens are the canonical app foundation.',
       status: 'ready',
     },
     {

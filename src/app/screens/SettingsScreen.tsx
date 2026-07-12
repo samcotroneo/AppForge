@@ -1,3 +1,6 @@
+import type React from 'react'
+import { Card, List, ListItem } from 'konsta/react'
+import AppShell from '../../components/shell/AppShell'
 import ErrorState from '../../components/feedback/ErrorState'
 import SectionCard from '../../components/ui/SectionCard'
 import type { AppFoundationContext } from '../../lib/bootstrap'
@@ -9,195 +12,184 @@ type SettingsScreenProps = {
   portfolioProjectCount: number
 }
 
-const statusBadgeStyles: Record<EnvStatus, string> = {
-  configured: 'background: rgba(214,169,96,0.12); color: #d6a960; border: 1px solid rgba(214,169,96,0.3);',
-  missing: 'background: rgba(168,56,24,0.12); color: #a83818; border: 1px solid rgba(168,56,24,0.3);',
-  enabled: 'background: rgba(224,104,24,0.12); color: #e06818; border: 1px solid rgba(224,104,24,0.3);',
-  disabled: 'background: rgba(58,60,66,0.3); color: #8a8c93; border: 1px solid #3a3c42;',
+const statusColor: Record<EnvStatus, string> = {
+  configured: '#d6a960',
+  missing: '#a83818',
+  enabled: '#e06818',
+  disabled: '#8a8c93',
 }
 
-function SettingsScreen(props: SettingsScreenProps) {
+const NATIVE_PLATFORM_COMMANDS = ['npx cap add android', 'npx cap add ios'] as const
+
+const neutralBadge: React.CSSProperties = { borderRadius: '4px', padding: '2px 8px', background: 'rgba(58,60,66,0.4)', color: '#8a8c93', border: '1px solid #3a3c42' }
+
+function SettingsScreen({ blockedTaskCount, foundation, portfolioProjectCount }: SettingsScreenProps) {
   return (
-    <div class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+    <AppShell title="Settings">
       <SectionCard
         eyebrow="Starter example"
-        title="Example environment and delivery setup"
-        description="This sample screen shows how config, readiness checks, and platform reminders can live in a dedicated setup area."
+        title="Environment and delivery setup"
+        description="Sample config, readiness checks, and platform reminders in a dedicated setup area."
       >
-        <div class="space-y-4">
-          <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
-            <h3 class="font-semibold text-[#f2f0ea]">Runtime configuration</h3>
-            <div class="mt-3 flex flex-wrap items-end justify-between gap-3">
-              <div>
-                <p class="text-3xl font-black text-[#e06818]">
-                  {props.foundation.envSummary.configuredRequiredCount}/
-                  {props.foundation.envSummary.totalRequiredCount}
-                </p>
-                <p class="mt-1 text-sm text-[#8a8c93]">
-                  Example public settings surfaced from the starter env layer.
-                </p>
-              </div>
+        {/* Runtime config */}
+        <Card style={{ background: '#26272c', border: '1px solid #3a3c42', margin: '0 0 16px' }}>
+          <p style={{ fontSize: '12px', color: '#8a8c93' }}>Runtime configuration</p>
+          <p style={{ fontSize: '32px', fontWeight: 900, color: '#e06818', margin: '8px 0 4px' }}>
+            {foundation.envSummary.configuredRequiredCount}/{foundation.envSummary.totalRequiredCount}
+          </p>
+          <p style={{ fontSize: '12px', color: '#8a8c93', marginBottom: '12px' }}>
+            Example public settings from the starter env layer.
+          </p>
+          <List>
+            {foundation.envSummary.items.map((item) => (
+              <ListItem
+                key={item.envKey}
+                title={item.label}
+                subtitle={item.envKey}
+                after={
+                  <span style={{ fontSize: '12px', fontWeight: 600, color: statusColor[item.status] }}>
+                    {item.value}
+                  </span>
+                }
+              />
+            ))}
+          </List>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '12px' }}>
+            {foundation.featureFlags.items.map((flag) => (
               <span
-                class="rounded px-2 py-0.5 text-xs font-mono"
-                style="background: rgba(58,60,66,0.4); color: #8a8c93; border: 1px solid #3a3c42;"
+                key={flag.label}
+                style={{
+                  borderRadius: '4px',
+                  padding: '2px 8px',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  background: flag.enabled ? 'rgba(224,104,24,0.12)' : 'rgba(58,60,66,0.3)',
+                  color: flag.enabled ? '#e06818' : '#8a8c93',
+                  border: flag.enabled ? '1px solid rgba(224,104,24,0.3)' : '1px solid #3a3c42',
+                }}
               >
-                src/lib/env.ts
+                {flag.label}
               </span>
-            </div>
-            <div class="mt-4 space-y-3">
-              {props.foundation.envSummary.items.map((item) => (
-                <div class="rounded-md border border-[#3a3c42] bg-[#1a1b20] p-3">
-                  <div class="flex flex-wrap items-center justify-between gap-2">
-                    <div>
-                      <p class="font-medium text-[#f2f0ea]">{item.label}</p>
-                      <p class="mt-1 text-xs text-[#8a8c93]">{item.envKey}</p>
-                    </div>
-                    <span class="rounded px-2 py-0.5 text-xs font-medium" style={statusBadgeStyles[item.status]}>
-                      {item.value}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div class="mt-4 flex flex-wrap gap-2">
-              {props.foundation.featureFlags.items.map((flag) => (
-                <span
-                  class="rounded px-2 py-0.5 text-xs font-medium"
-                  style={
-                    flag.enabled
-                      ? 'background: rgba(224,104,24,0.12); color: #e06818; border: 1px solid rgba(224,104,24,0.3);'
-                      : 'background: rgba(58,60,66,0.3); color: #8a8c93; border: 1px solid #3a3c42;'
-                  }
-                >
-                  {flag.label}
-                </span>
-              ))}
-            </div>
-          </article>
-          <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
-            <h3 class="font-semibold text-[#f2f0ea]">Bootstrap, routing, and session</h3>
-            <div class="mt-3 grid gap-3 md:grid-cols-2">
-              <div class="rounded-md border border-[#3a3c42] bg-[#1a1b20] p-3">
-                <p class="text-sm text-[#8a8c93]">Route mode</p>
-                <p class="mt-2 font-semibold text-[#f2f0ea]">{props.foundation.routePolicy.mode}</p>
-                <p class="mt-1 text-sm text-[#8a8c93]">
-                  Deep linking: {props.foundation.routePolicy.supportsDeepLinking ? 'on' : 'off'}
-                </p>
-              </div>
-              <div class="rounded-md border border-[#3a3c42] bg-[#1a1b20] p-3">
-                <p class="text-sm text-[#8a8c93]">Session strategy</p>
-                <p class="mt-2 font-semibold text-[#f2f0ea]">{props.foundation.session.policy.authStrategy}</p>
-                <p class="mt-1 text-sm text-[#8a8c93]">
-                  Current state: {props.foundation.session.current.status}
-                </p>
-              </div>
-            </div>
-          </article>
-          <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
-            <h3 class="font-semibold text-[#f2f0ea]">Persistence, data, and observability</h3>
-            <div class="mt-3 grid gap-3 md:grid-cols-2">
-              <div class="rounded-md border border-[#3a3c42] bg-[#1a1b20] p-3">
-                <p class="text-sm text-[#8a8c93]">Persistence driver</p>
-                <p class="mt-2 font-semibold text-[#f2f0ea]">{props.foundation.persistence.policy.driver}</p>
-                <p class="mt-1 text-sm text-[#8a8c93]">
-                  Schema v{props.foundation.persistence.policy.schemaVersion} with offline-safe writes.
-                </p>
-              </div>
-              <div class="rounded-md border border-[#3a3c42] bg-[#1a1b20] p-3">
-                <p class="text-sm text-[#8a8c93]">Observability sinks</p>
-                <p class="mt-2 font-semibold text-[#f2f0ea]">{props.foundation.observability.sinks.length}</p>
-                <p class="mt-1 text-sm text-[#8a8c93]">
-                  {props.foundation.dataBoundary.readySinkCount} ready, rest are vendor placeholders.
-                </p>
-              </div>
-            </div>
-          </article>
-          <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
-            <h3 class="font-semibold text-[#f2f0ea]">Design and testing seams</h3>
-            <div class="mt-3 space-y-3">
-              {props.foundation.designSystemRules.slice(0, 3).map((rule) => (
-                <div class="rounded-md border border-[#3a3c42] bg-[#1a1b20] p-3">
-                  <p class="font-medium text-[#f2f0ea]">{rule.title}</p>
-                  <p class="mt-1 text-sm text-[#8a8c93]">{rule.detail}</p>
-                </div>
-              ))}
-            </div>
-          </article>
-        </div>
-      </SectionCard>
+            ))}
+          </div>
+        </Card>
 
-      <div class="space-y-6">
-        <SectionCard
-          eyebrow="Platform example"
-          title="Sample native setup reminders"
-          description="Capacitor and PWA support are wired, and this card shows the kind of platform guidance a real app might surface."
-        >
-          <ErrorState
-            title="Example native setup warning"
-            description="Use reminders like this to point developers toward the platform steps that still need real app-specific work."
-          >
-            <div class="flex flex-wrap gap-2 text-xs text-[#8a8c93]">
-              <span class="rounded px-2 py-0.5 font-mono" style="background: rgba(58,60,66,0.4); color: #8a8c93; border: 1px solid #3a3c42;">
-                npx cap add android
-              </span>
-              <span class="rounded px-2 py-0.5 font-mono" style="background: rgba(58,60,66,0.4); color: #8a8c93; border: 1px solid #3a3c42;">
-                npx cap add ios
-              </span>
-              {props.foundation.platform.capabilities.map((capability) => (
-                <span
-                  class="rounded px-2 py-0.5 font-medium"
-                  style={
-                    capability.available
-                      ? 'background: rgba(214,169,96,0.12); color: #d6a960; border: 1px solid rgba(214,169,96,0.3);'
-                      : 'background: rgba(248,223,102,0.1); color: #f8df66; border: 1px solid rgba(248,223,102,0.3);'
-                  }
-                >
-                  {capability.label}
-                </span>
-              ))}
+        {/* Bootstrap + session */}
+        <Card style={{ background: '#26272c', border: '1px solid #3a3c42', margin: '0 0 16px' }}>
+          <p style={{ fontSize: '14px', fontWeight: 600, color: '#f2f0ea', marginBottom: '12px' }}>Bootstrap, routing, and session</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+            <div style={{ background: '#1a1b20', borderRadius: '8px', padding: '12px', border: '1px solid #3a3c42' }}>
+              <p style={{ fontSize: '12px', color: '#8a8c93' }}>Route mode</p>
+              <p style={{ fontSize: '14px', fontWeight: 600, color: '#f2f0ea', margin: '4px 0' }}>{foundation.routePolicy.mode}</p>
+              <p style={{ fontSize: '12px', color: '#8a8c93' }}>Deep linking: {foundation.routePolicy.supportsDeepLinking ? 'on' : 'off'}</p>
             </div>
-          </ErrorState>
-        </SectionCard>
-
-        <SectionCard
-          eyebrow="Signals example"
-          title="Sample app-wide signals"
-          description="These cards demonstrate how shared notices, adapter counts, and setup blockers can stay visible outside feature routes."
-        >
-          <div class="space-y-4">
-            <div class="rounded-md border border-[#3a3c42] bg-[#26272c] p-5">
-              <p class="text-sm text-[#8a8c93]">Blocked sample tasks</p>
-              <p class="mt-3 text-4xl font-black text-[#a83818]">{props.blockedTaskCount}</p>
-              <p class="mt-2 text-sm text-[#8a8c93]">
-                {props.foundation.envSummary.missingRequiredKeys.length > 0
-                  ? `Missing public config: ${props.foundation.envSummary.missingRequiredKeys.join(', ')}.`
-                  : 'Use this area for setup checks, integration warnings, and release-readiness policies.'}
-              </p>
-            </div>
-            <div class="rounded-md border border-[#3a3c42] bg-[#26272c] p-5">
-              <p class="text-sm text-[#8a8c93]">Starter coverage</p>
-              <p class="mt-3 text-4xl font-black text-[#e06818]">
-                {props.portfolioProjectCount + props.foundation.dataBoundary.adapters.length}
-              </p>
-              <p class="mt-2 text-sm text-[#8a8c93]">
-                Starter projects plus shared adapters currently mapped into the base app shell.
-              </p>
-            </div>
-            <div class="rounded-md border border-[#3a3c42] bg-[#26272c] p-5">
-              <p class="text-sm text-[#8a8c93]">Sample notices</p>
-              <p class="mt-3 text-4xl font-black text-[#f8df66]">{props.foundation.feedback.items.length}</p>
-              <div class="mt-3 space-y-2 text-sm text-[#8a8c93]">
-                {props.foundation.feedback.items.map((item) => (
-                  <p>
-                    <span class="font-medium text-[#f2f0ea]">{item.title}:</span> {item.message}
-                  </p>
-                ))}
-              </div>
+            <div style={{ background: '#1a1b20', borderRadius: '8px', padding: '12px', border: '1px solid #3a3c42' }}>
+              <p style={{ fontSize: '12px', color: '#8a8c93' }}>Session strategy</p>
+              <p style={{ fontSize: '14px', fontWeight: 600, color: '#f2f0ea', margin: '4px 0' }}>{foundation.session.policy.authStrategy}</p>
+              <p style={{ fontSize: '12px', color: '#8a8c93' }}>State: {foundation.session.current.status}</p>
             </div>
           </div>
-        </SectionCard>
-      </div>
-    </div>
+        </Card>
+
+        {/* Persistence + observability */}
+        <Card style={{ background: '#26272c', border: '1px solid #3a3c42', margin: '0 0 16px' }}>
+          <p style={{ fontSize: '14px', fontWeight: 600, color: '#f2f0ea', marginBottom: '12px' }}>Persistence, data, and observability</p>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+            <div style={{ background: '#1a1b20', borderRadius: '8px', padding: '12px', border: '1px solid #3a3c42' }}>
+              <p style={{ fontSize: '12px', color: '#8a8c93' }}>Persistence driver</p>
+              <p style={{ fontSize: '14px', fontWeight: 600, color: '#f2f0ea', margin: '4px 0' }}>{foundation.persistence.policy.driver}</p>
+              <p style={{ fontSize: '12px', color: '#8a8c93' }}>Schema v{foundation.persistence.policy.schemaVersion}</p>
+            </div>
+            <div style={{ background: '#1a1b20', borderRadius: '8px', padding: '12px', border: '1px solid #3a3c42' }}>
+              <p style={{ fontSize: '12px', color: '#8a8c93' }}>Observability sinks</p>
+              <p style={{ fontSize: '14px', fontWeight: 600, color: '#f2f0ea', margin: '4px 0' }}>{foundation.observability.sinks.length}</p>
+              <p style={{ fontSize: '12px', color: '#8a8c93' }}>{foundation.dataBoundary.readySinkCount} ready</p>
+            </div>
+          </div>
+        </Card>
+
+        {/* Design seams */}
+        <Card style={{ background: '#26272c', border: '1px solid #3a3c42', margin: 0 }}>
+          <p style={{ fontSize: '14px', fontWeight: 600, color: '#f2f0ea', marginBottom: '12px' }}>Design and testing seams</p>
+          {foundation.designSystemRules.slice(0, 3).map((rule) => (
+            <div key={rule.title} style={{ background: '#1a1b20', borderRadius: '8px', padding: '12px', border: '1px solid #3a3c42', marginBottom: '8px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 600, color: '#f2f0ea' }}>{rule.title}</p>
+              <p style={{ fontSize: '12px', color: '#8a8c93', marginTop: '4px' }}>{rule.detail}</p>
+            </div>
+          ))}
+        </Card>
+      </SectionCard>
+
+      {/* Platform */}
+      <SectionCard
+        eyebrow="Platform example"
+        title="Sample native setup reminders"
+        description="Capacitor and PWA support are wired. This card shows the kind of platform guidance a real app might surface."
+      >
+        <ErrorState
+          title="Example native setup warning"
+          description="Use reminders like this to point developers toward platform steps that still need real app-specific work."
+        >
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', fontSize: '12px', color: '#8a8c93' }}>
+            {NATIVE_PLATFORM_COMMANDS.map((cmd) => (
+              <span key={cmd} style={{ ...neutralBadge, borderRadius: '4px', padding: '2px 8px', fontFamily: 'monospace' }}>{cmd}</span>
+            ))}
+            {foundation.platform.capabilities.map((capability) => (
+              <span
+                key={capability.label}
+                style={{
+                  borderRadius: '4px',
+                  padding: '2px 8px',
+                  fontWeight: 600,
+                  background: capability.available ? 'rgba(214,169,96,0.12)' : 'rgba(248,223,102,0.1)',
+                  color: capability.available ? '#d6a960' : '#f8df66',
+                  border: capability.available ? '1px solid rgba(214,169,96,0.3)' : '1px solid rgba(248,223,102,0.3)',
+                }}
+              >
+                {capability.label}
+              </span>
+            ))}
+          </div>
+        </ErrorState>
+      </SectionCard>
+
+      {/* Signals */}
+      <SectionCard
+        eyebrow="Signals example"
+        title="Sample app-wide signals"
+        description="Shared notices, adapter counts, and setup blockers visible outside feature routes."
+      >
+        <div style={{ display: 'grid', gap: '12px' }}>
+          <Card style={{ background: '#26272c', border: '1px solid #3a3c42', margin: 0 }}>
+            <p style={{ fontSize: '12px', color: '#8a8c93' }}>Blocked sample tasks</p>
+            <p style={{ fontSize: '36px', fontWeight: 900, color: '#a83818', margin: '8px 0 4px' }}>{blockedTaskCount}</p>
+            <p style={{ fontSize: '12px', color: '#8a8c93' }}>
+              {foundation.envSummary.missingRequiredKeys.length > 0
+                ? `Missing config: ${foundation.envSummary.missingRequiredKeys.join(', ')}`
+                : 'Use this for setup checks, integration warnings, and release-readiness policies.'}
+            </p>
+          </Card>
+          <Card style={{ background: '#26272c', border: '1px solid #3a3c42', margin: 0 }}>
+            <p style={{ fontSize: '12px', color: '#8a8c93' }}>Starter coverage</p>
+            <p style={{ fontSize: '36px', fontWeight: 900, color: '#e06818', margin: '8px 0 4px' }}>
+              {portfolioProjectCount + foundation.dataBoundary.adapters.length}
+            </p>
+            <p style={{ fontSize: '12px', color: '#8a8c93' }}>Starter projects plus shared adapters mapped into the base shell.</p>
+          </Card>
+          <Card style={{ background: '#26272c', border: '1px solid #3a3c42', margin: 0 }}>
+            <p style={{ fontSize: '12px', color: '#8a8c93' }}>Sample notices</p>
+            <p style={{ fontSize: '36px', fontWeight: 900, color: '#f8df66', margin: '8px 0 4px' }}>{foundation.feedback.items.length}</p>
+            <div style={{ marginTop: '8px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              {foundation.feedback.items.map((item) => (
+                <p key={item.title} style={{ fontSize: '12px', color: '#8a8c93' }}>
+                  <span style={{ fontWeight: 600, color: '#f2f0ea' }}>{item.title}:</span> {item.message}
+                </p>
+              ))}
+            </div>
+          </Card>
+        </div>
+      </SectionCard>
+    </AppShell>
   )
 }
 

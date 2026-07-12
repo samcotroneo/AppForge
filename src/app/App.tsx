@@ -1,7 +1,8 @@
-import { createMemo, createSignal, onCleanup, onMount } from 'solid-js'
-import ErrorState from '../components/feedback/ErrorState'
-import LoadingState from '../components/feedback/LoadingState'
-import AppShell from '../components/shell/AppShell'
+import { useEffect, useMemo, useState } from 'react'
+import { IonApp, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from '@ionic/react'
+import { IonReactHashRouter } from '@ionic/react-router'
+import { Redirect, Route } from 'react-router-dom'
+import { App as KonstaApp } from 'konsta/react'
 import {
   getBlockedTasks,
   onboardingChecklist,
@@ -11,157 +12,115 @@ import {
 } from '../features/workbench/workspaceData'
 import type { AppFoundationContext } from '../lib/bootstrap'
 import { bootstrapApp } from '../lib/bootstrap'
-import { subscribeToRouteChanges, syncRouteToHash } from '../lib/navigation'
-import type { AppRoute } from './routes'
-import { appRoutes, getAppRoute } from './routes'
 import HomeScreen from './screens/HomeScreen'
 import SettingsScreen from './screens/SettingsScreen'
 import WorkspaceScreen from './screens/WorkspaceScreen'
+import LoadingState from '../components/feedback/LoadingState'
+import ErrorState from '../components/feedback/ErrorState'
 
 function App() {
-  const [activeRoute, setActiveRoute] = createSignal<AppRoute>('home')
-  const [foundation, setFoundation] = createSignal<AppFoundationContext | null>(null)
-  const [bootStatus, setBootStatus] = createSignal<'loading' | 'ready' | 'error'>('loading')
-  const [bootError, setBootError] = createSignal<string | null>(null)
+  const [foundation, setFoundation] = useState<AppFoundationContext | null>(null)
+  const [bootStatus, setBootStatus] = useState<'loading' | 'ready' | 'error'>('loading')
+  const [bootError, setBootError] = useState<string | null>(null)
 
-  onMount(() => {
-    const cleanupRouteSync = subscribeToRouteChanges((route) => setActiveRoute(route))
-
-    const runBootstrap = async () => {
+  useEffect(() => {
+    const run = async () => {
       setBootStatus('loading')
       setBootError(null)
-
       const result = await bootstrapApp()
       if (result.status === 'error') {
         setBootStatus('error')
         setBootError(result.message)
         return
       }
-
       setFoundation(result.context)
-      setActiveRoute(result.context.initialRoute)
       setBootStatus('ready')
-      syncRouteToHash(result.context.initialRoute)
     }
+    void run()
+  }, [])
 
-    void runBootstrap()
-    onCleanup(cleanupRouteSync)
-  })
+  const portfolioSummary = useMemo(() => summarizeProjectPortfolio(starterProjects), [])
+  const blockedTasks = useMemo(() => getBlockedTasks(starterTasks), [])
 
-  const routeMeta = createMemo(() => getAppRoute(activeRoute()))
-  const portfolioSummary = createMemo(() => summarizeProjectPortfolio(starterProjects))
-  const blockedTasks = createMemo(() => getBlockedTasks(starterTasks))
-  const statusContext = createMemo(() => foundation())
-
-  const handleNavigate = (route: AppRoute) => {
-    setActiveRoute(route)
-    syncRouteToHash(route)
+  if (bootStatus === 'loading') {
+    return (
+      <KonstaApp theme="material">
+        <IonApp>
+          <LoadingState />
+        </IonApp>
+      </KonstaApp>
+    )
   }
 
-  const statusContent = (
-    <div class="status-stack">
-      <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
-        <p class="text-sm text-[#8a8c93]">Selected sample route</p>
-        <h3 class="mt-2 text-lg font-semibold text-[#f2f0ea]">{routeMeta().label}</h3>
-        <p class="mt-2 text-sm leading-6 text-[#8a8c93]">{routeMeta().description}</p>
-      </article>
-      <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
-        <p class="text-sm text-[#8a8c93]">Bootstrap example</p>
-        <div class="mt-3 flex items-end justify-between gap-3">
-          <span class="text-3xl font-black text-[#e06818]">{statusContext()?.routePolicy.mode ?? '—'}</span>
-          <span class="text-sm text-[#8a8c93]">starter route policy with back-button support</span>
-        </div>
-      </article>
-      <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
-        <p class="text-sm text-[#8a8c93]">Persistence + session sample</p>
-        <p class="mt-3 text-3xl font-black text-[#d6a960]">{statusContext()?.persistence.policy.driver ?? '—'}</p>
-        <p class="mt-2 text-sm text-[#8a8c93]">
-          {statusContext()?.session.current.status ?? 'anonymous'} sample session restored on boot.
-        </p>
-      </article>
-      <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
-        <p class="text-sm text-[#8a8c93]">Runtime config example</p>
-        <p class="mt-3 text-3xl font-black text-[#d6a960]">
-          {statusContext()?.envSummary.configuredRequiredCount ?? 0}/
-          {statusContext()?.envSummary.totalRequiredCount ?? 0}
-        </p>
-        <p class="mt-2 text-sm text-[#8a8c93]">Example required public settings configured.</p>
-      </article>
-      <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
-        <p class="text-sm text-[#8a8c93]">Data + observability example</p>
-        <p class="mt-3 text-3xl font-black text-[#f8df66]">{statusContext()?.dataBoundary.adapters.length ?? 0}</p>
-        <p class="mt-2 text-sm text-[#8a8c93]">
-          {statusContext()?.observability.sinks.length ?? 0} sample sink definitions, {blockedTasks().length} blocked starter tasks.
-        </p>
-      </article>
-      <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
-        <p class="text-sm text-[#8a8c93]">Sample notices</p>
-        <p class="mt-3 text-3xl font-black text-[#f8df66]">{statusContext()?.feedback.items.length ?? 0}</p>
-        <p class="mt-2 text-sm text-[#8a8c93]">Example shared notices for startup, config, and release readiness.</p>
-      </article>
-    </div>
-  )
-
-  const renderRoute = () => {
-    if (bootStatus() === 'loading') {
-      return <LoadingState />
-    }
-
-    if (bootStatus() === 'error' || !foundation()) {
-      return (
-        <ErrorState
-          title="App bootstrap failed"
-          description={bootError() ?? 'The starter shell could not complete its initialization flow.'}
-        >
-          <button type="button" class="btn btn-sm btn-primary" onClick={() => window.location.reload()}>
-            Reload app
-          </button>
-        </ErrorState>
-      )
-    }
-
-    switch (activeRoute()) {
-      case 'workspace':
-        return (
-          <WorkspaceScreen
-            projects={starterProjects}
-            tasks={starterTasks}
-            dataBoundary={foundation()!.dataBoundary}
-          />
-        )
-      case 'settings':
-        return (
-          <SettingsScreen
-            blockedTaskCount={blockedTasks().length}
-            foundation={foundation()!}
-            portfolioProjectCount={portfolioSummary().total}
-          />
-        )
-      case 'home':
-      default:
-        return (
-          <HomeScreen
-            projects={starterProjects}
-            summary={portfolioSummary()}
-            checklist={onboardingChecklist}
-            feedbackCount={foundation()!.feedback.items.length}
-            foundationCount={foundation()!.dataBoundary.adapters.length + foundation()!.designSystemRules.length}
-            onOpenWorkspace={() => handleNavigate('workspace')}
-            onOpenSettings={() => handleNavigate('settings')}
-          />
-        )
-    }
+  if (bootStatus === 'error' || !foundation) {
+    return (
+      <KonstaApp theme="material">
+        <IonApp>
+          <ErrorState
+            title="App bootstrap failed"
+            description={bootError ?? 'The starter shell could not complete its initialization flow.'}
+          >
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              style={{ background: '#e06818', color: '#f2f0ea', border: 'none', borderRadius: '6px', padding: '8px 16px', fontWeight: 600, cursor: 'pointer' }}
+            >
+              Reload app
+            </button>
+          </ErrorState>
+        </IonApp>
+      </KonstaApp>
+    )
   }
 
   return (
-    <AppShell
-      activeRoute={activeRoute()}
-      navItems={appRoutes}
-      onNavigate={handleNavigate}
-      statusContent={statusContent}
-    >
-      {renderRoute()}
-    </AppShell>
+    <KonstaApp theme="material">
+      <IonApp>
+        <IonReactHashRouter>
+          <IonTabs>
+            <IonRouterOutlet>
+              <Redirect exact from="/" to="/home" />
+              <Route path="/home">
+                <HomeScreen
+                  projects={starterProjects}
+                  summary={portfolioSummary}
+                  checklist={onboardingChecklist}
+                  foundation={foundation}
+                  feedbackCount={foundation.feedback.items.length}
+                  foundationCount={foundation.dataBoundary.adapters.length + foundation.designSystemRules.length}
+                />
+              </Route>
+              <Route path="/workspace">
+                <WorkspaceScreen
+                  projects={starterProjects}
+                  tasks={starterTasks}
+                  dataBoundary={foundation.dataBoundary}
+                />
+              </Route>
+              <Route path="/settings">
+                <SettingsScreen
+                  blockedTaskCount={blockedTasks.length}
+                  foundation={foundation}
+                  portfolioProjectCount={portfolioSummary.total}
+                />
+              </Route>
+            </IonRouterOutlet>
+
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="home" href="/home">
+                <IonLabel>Overview</IonLabel>
+              </IonTabButton>
+              <IonTabButton tab="workspace" href="/workspace">
+                <IonLabel>Workspace</IonLabel>
+              </IonTabButton>
+              <IonTabButton tab="settings" href="/settings">
+                <IonLabel>Settings</IonLabel>
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        </IonReactHashRouter>
+      </IonApp>
+    </KonstaApp>
   )
 }
 

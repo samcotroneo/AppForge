@@ -1,94 +1,71 @@
 @import "tailwindcss";
-@plugin "daisyui" {
-  themes: appforge --default;
-}
-@plugin "daisyui/theme" {
-  name: "appforge";
-  default: true;
-  color-scheme: dark;
 
-  /* Surfaces */
-  --color-base-100: #1a1b20;
-  --color-base-200: #111116;
-  --color-base-300: #26272c;
-  --color-base-content: #f2f0ea;
+/* Ionic core CSS */
+@import "@ionic/react/css/core.css";
+@import "@ionic/react/css/normalize.css";
+@import "@ionic/react/css/structure.css";
+@import "@ionic/react/css/typography.css";
+@import "@ionic/react/css/padding.css";
+@import "@ionic/react/css/float-elements.css";
+@import "@ionic/react/css/text-alignment.css";
+@import "@ionic/react/css/text-transformation.css";
+@import "@ionic/react/css/flex-utils.css";
+@import "@ionic/react/css/display.css";
 
-  /* Brand */
-  --color-primary: #e06818;
-  --color-primary-content: #f2f0ea;
-  --color-secondary: #d6a960;
-  --color-secondary-content: #111116;
-  --color-accent: #f8df66;
-  --color-accent-content: #111116;
+/* Ionic dark mode */
+@import "@ionic/react/css/palettes/dark.always.css";
 
-  /* Structural */
-  --color-neutral: #3a3c42;
-  --color-neutral-content: #f2f0ea;
-
-  /* States */
-  --color-info: #8a8c93;
-  --color-info-content: #111116;
-  --color-success: #d6a960;
-  --color-success-content: #111116;
-  --color-warning: #f8df66;
-  --color-warning-content: #111116;
-  --color-error: #a83818;
-  --color-error-content: #f2f0ea;
-
-  /* Shape */
-  --radius-box: 0.5rem;
-  --radius-field: 0.375rem;
-  --radius-badge: 0.25rem;
-}
+/* Konsta UI */
+@import "konsta/theme.css";
 
 :root {
-  color-scheme: dark;
+  --ion-background-color: #111116;
+  --ion-background-color-rgb: 17, 17, 22;
+  --ion-text-color: #f2f0ea;
+  --ion-text-color-rgb: 242, 240, 234;
+  --ion-color-primary: #e06818;
+  --ion-color-primary-rgb: 224, 104, 24;
+  --ion-color-primary-contrast: #f2f0ea;
+  --ion-color-primary-shade: #c45c16;
+  --ion-color-primary-tint: #e3772f;
+  --ion-color-secondary: #d6a960;
+  --ion-color-secondary-rgb: 214, 169, 96;
+  --ion-color-secondary-contrast: #111116;
+  --ion-color-secondary-shade: #bc952a;
+  --ion-color-secondary-tint: #dab270;
+  --ion-color-tertiary: #f8df66;
+  --ion-color-tertiary-rgb: 248, 223, 102;
+  --ion-color-tertiary-contrast: #111116;
+  --ion-color-tertiary-shade: #dac35a;
+  --ion-color-tertiary-tint: #f9e275;
+  --ion-color-success: #d6a960;
+  --ion-color-warning: #f8df66;
+  --ion-color-danger: #a83818;
+  --ion-color-dark: #1a1b20;
+  --ion-color-medium: #8a8c93;
+  --ion-color-light: #3a3c42;
+  --ion-toolbar-background: #1a1b20;
+  --ion-tab-bar-background: #1a1b20;
+  --ion-tab-bar-border-color: #3a3c42;
+  --ion-item-background: #1a1b20;
+  --ion-card-background: #26272c;
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  color-scheme: dark;
 }
 
-body {
-  @apply min-h-screen bg-base-200 text-base-content;
-}
-
-#root {
-  @apply min-h-screen;
-}
-
-.app-shell {
-  @apply mx-auto flex min-h-screen max-w-[96rem] flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8;
-}
-
-.shell-grid {
-  @apply grid flex-1 gap-6 xl:grid-cols-[15rem_minmax(0,1fr)_18rem];
-}
-
-.app-grid {
-  @apply grid gap-6 xl:grid-cols-[1.1fr_0.9fr];
-}
-
-.metric-grid {
-  @apply grid gap-4 md:grid-cols-3;
-}
-
-.status-stack {
-  @apply space-y-4;
-}
-
-.section-copy {
-  @apply max-w-3xl text-sm leading-7 text-base-content/80;
-}
-
-/* Brand helpers */
-.forge-border {
-  border-color: #3a3c42;
-}
-
+/* Brand helper */
 .forge-glow {
   box-shadow: 0 0 24px 0 rgba(224, 104, 24, 0.15);
 }
 
-.forge-hero-bg {
-  background-image: url('/appforge_background.png');
-  background-size: cover;
-  background-position: center;
+ion-tab-bar {
+  --border: 1px solid #3a3c42;
+}
+
+ion-tab-button.tab-selected {
+  --color-selected: #e06818;
+}
+
+ion-toolbar {
+  --border-color: #3a3c42;
 }

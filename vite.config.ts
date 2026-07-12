@@ -1,12 +1,12 @@
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'vitest/config'
 import { VitePWA } from 'vite-plugin-pwa'
-import solid from 'vite-plugin-solid'
+import react from '@vitejs/plugin-react'
 import { manifest } from './src/manifest.ts'
 
 export default defineConfig({
   plugins: [
-    solid(),
+    react(),
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',

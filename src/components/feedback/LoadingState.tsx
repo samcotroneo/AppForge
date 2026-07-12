@@ -1,18 +1,26 @@
+import { IonContent, IonPage, IonSpinner } from '@ionic/react'
+
 function LoadingState() {
   return (
-    <div class="rounded-lg border border-[#3a3c42] bg-[#1a1b20] p-8 shadow-lg">
-      <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-        <span class="loading loading-spinner loading-lg" style="color: #e06818;" />
-        <div>
-          <p class="text-sm font-semibold uppercase tracking-[0.3em] text-[#d6a960]">Loading state</p>
-          <h2 class="mt-2 text-2xl font-bold text-[#f2f0ea]">Bootstrapping the starter workspace</h2>
-          <p class="section-copy mt-3 text-[#8a8c93]">
-            App-level providers, local defaults, and the reference feature are initializing before the
-            first screen renders.
-          </p>
+    <IonPage>
+      <IonContent>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100%', padding: '32px', gap: '20px' }}>
+          <IonSpinner name="crescent" style={{ color: '#e06818', width: '48px', height: '48px' }} />
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.3em', color: '#d6a960' }}>
+              Loading state
+            </p>
+            <h2 style={{ marginTop: '8px', fontSize: '22px', fontWeight: 700, color: '#f2f0ea' }}>
+              Bootstrapping the starter workspace
+            </h2>
+            <p style={{ marginTop: '12px', fontSize: '14px', lineHeight: 1.75, color: '#8a8c93', maxWidth: '420px' }}>
+              App-level providers, local defaults, and the reference feature are initializing before the
+              first screen renders.
+            </p>
+          </div>
         </div>
-      </div>
-    </div>
+      </IonContent>
+    </IonPage>
   )
 }
 

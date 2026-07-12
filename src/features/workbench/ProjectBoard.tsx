@@ -1,4 +1,5 @@
-import { For, createEffect, createMemo, createSignal } from 'solid-js'
+import { useEffect, useMemo, useState } from 'react'
+import { Card } from 'konsta/react'
 import EmptyState from '../../components/feedback/EmptyState'
 import type { AppDataBoundary } from '../../lib/data'
 import type {
@@ -16,222 +17,180 @@ type ProjectBoardProps = {
 
 const filters: WorkspaceProjectFilter[] = ['all', 'active', 'draft', 'blocked']
 
-const statusBadgeStyle = (status: string) => {
-  if (status === 'blocked') return 'background: rgba(168,56,24,0.15); color: #a83818; border: 1px solid rgba(168,56,24,0.3);'
-  if (status === 'draft') return 'background: rgba(248,223,102,0.1); color: #f8df66; border: 1px solid rgba(248,223,102,0.3);'
-  return 'background: rgba(214,169,96,0.12); color: #d6a960; border: 1px solid rgba(214,169,96,0.3);'
+const statusColor = (status: string) => {
+  if (status === 'blocked') return { background: 'rgba(168,56,24,0.15)', color: '#a83818', border: '1px solid rgba(168,56,24,0.3)' }
+  if (status === 'draft') return { background: 'rgba(248,223,102,0.1)', color: '#f8df66', border: '1px solid rgba(248,223,102,0.3)' }
+  return { background: 'rgba(214,169,96,0.12)', color: '#d6a960', border: '1px solid rgba(214,169,96,0.3)' }
 }
 
-const taskStateBadgeStyle = (state: string) => {
-  if (state === 'blocked') return 'background: rgba(168,56,24,0.15); color: #a83818; border: 1px solid rgba(168,56,24,0.3);'
-  if (state === 'in-progress') return 'background: rgba(224,104,24,0.12); color: #e06818; border: 1px solid rgba(224,104,24,0.3);'
-  return 'background: rgba(214,169,96,0.12); color: #d6a960; border: 1px solid rgba(214,169,96,0.3);'
+const taskStateColor = (state: string) => {
+  if (state === 'blocked') return { background: 'rgba(168,56,24,0.15)', color: '#a83818', border: '1px solid rgba(168,56,24,0.3)' }
+  if (state === 'in-progress') return { background: 'rgba(224,104,24,0.12)', color: '#e06818', border: '1px solid rgba(224,104,24,0.3)' }
+  return { background: 'rgba(214,169,96,0.12)', color: '#d6a960', border: '1px solid rgba(214,169,96,0.3)' }
 }
 
-function ProjectBoard(props: ProjectBoardProps) {
-  const [filter, setFilter] = createSignal<WorkspaceProjectFilter>('all')
-  const [selectedProjectId, setSelectedProjectId] = createSignal(props.projects[0]?.id ?? '')
+function ProjectBoard({ projects, tasks, dataBoundary }: ProjectBoardProps) {
+  const [filter, setFilter] = useState<WorkspaceProjectFilter>('all')
+  const [selectedProjectId, setSelectedProjectId] = useState(projects[0]?.id ?? '')
 
-  const visibleProjects = createMemo(() => filterProjectsByStatus(props.projects, filter()))
+  const visibleProjects = useMemo(() => filterProjectsByStatus(projects, filter), [projects, filter])
 
-  createEffect(() => {
-    const firstVisibleProject = visibleProjects()[0]
-    if (!visibleProjects().some((project) => project.id === selectedProjectId())) {
-      setSelectedProjectId(firstVisibleProject?.id ?? '')
+  useEffect(() => {
+    if (!visibleProjects.some((p) => p.id === selectedProjectId)) {
+      setSelectedProjectId(visibleProjects[0]?.id ?? '')
     }
-  })
+  }, [visibleProjects, selectedProjectId])
 
-  const selectedProject = createMemo(
-    () => visibleProjects().find((project) => project.id === selectedProjectId()) ?? null,
+  const selectedProject = useMemo(
+    () => visibleProjects.find((p) => p.id === selectedProjectId) ?? null,
+    [visibleProjects, selectedProjectId],
   )
 
-  const selectedTasks = createMemo(() => getTasksForProject(props.tasks, selectedProject()?.id ?? ''))
+  const selectedTasks = useMemo(
+    () => getTasksForProject(tasks, selectedProject?.id ?? ''),
+    [tasks, selectedProject],
+  )
 
   return (
-    <div class="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-      <section class="space-y-4 rounded-lg border border-[#3a3c42] bg-[#1a1b20] p-5 shadow-md">
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#d6a960]">Example feature</p>
-            <h3 class="mt-2 text-xl font-bold text-[#f2f0ea]">Sample project board</h3>
-          </div>
-          <div class="flex flex-wrap gap-1">
-            <For each={filters}>
-              {(candidate) => (
-                <button
-                  type="button"
-                  class="rounded px-3 py-1.5 text-sm font-medium transition"
-                  style={
-                    filter() === candidate
-                      ? 'background: rgba(224,104,24,0.15); color: #e06818; border: 1px solid rgba(224,104,24,0.4);'
-                      : 'background: transparent; color: #8a8c93; border: 1px solid #3a3c42;'
-                  }
-                  onClick={() => setFilter(candidate)}
-                >
-                  {candidate === 'all' ? 'All' : candidate}
-                </button>
-              )}
-            </For>
-          </div>
-        </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      {/* Filter buttons */}
+      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+        {filters.map((candidate) => (
+          <button
+            key={candidate}
+            type="button"
+            onClick={() => setFilter(candidate)}
+            style={{
+              borderRadius: '6px',
+              padding: '6px 14px',
+              fontSize: '13px',
+              fontWeight: 500,
+              cursor: 'pointer',
+              border: 'none',
+              ...(filter === candidate
+                ? { background: 'rgba(224,104,24,0.15)', color: '#e06818', outline: '1px solid rgba(224,104,24,0.4)' }
+                : { background: 'transparent', color: '#8a8c93', outline: '1px solid #3a3c42' }),
+            }}
+          >
+            {candidate === 'all' ? 'All' : candidate}
+          </button>
+        ))}
+      </div>
 
-        <div class="space-y-3">
-          <For each={visibleProjects()}>
-            {(project) => (
-              <button
-                type="button"
-                class={`w-full rounded-md border p-4 text-left transition ${
-                  selectedProjectId() === project.id
-                    ? 'border-[#e06818] bg-[#e06818]/10 shadow-sm'
-                    : 'border-[#3a3c42] bg-[#26272c] hover:border-[#e06818]/40'
-                }`}
-                onClick={() => setSelectedProjectId(project.id)}
-              >
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <h4 class="font-semibold text-[#f2f0ea]">{project.name}</h4>
-                    <p class="mt-1 text-sm text-[#8a8c93]">{project.owner}</p>
-                  </div>
-                  <span class="rounded px-2 py-0.5 text-xs font-medium" style={statusBadgeStyle(project.status)}>
-                    {project.status}
-                  </span>
-                </div>
-                <p class="mt-3 text-sm leading-7 text-[#8a8c93]">{project.summary}</p>
-                <div class="mt-4 flex items-center justify-between gap-3 text-sm text-[#8a8c93]">
-                  <span>Readiness {project.readiness}%</span>
-                  <span>{new Date(project.updatedAt).toLocaleDateString()}</span>
-                </div>
-                <div class="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[#3a3c42]">
-                  <div
-                    class="h-full rounded-full transition-all"
-                    style={`width: ${project.readiness}%; background: #e06818;`}
-                  />
-                </div>
-              </button>
-            )}
-          </For>
-        </div>
-
-        {visibleProjects().length === 0 ? (
+      {/* Project list */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {visibleProjects.length === 0 ? (
           <EmptyState
             title="No projects match this workflow view"
             description="Use this section to demonstrate filtered lists, saved views, and team-specific queues without changing the route shell."
           />
-        ) : null}
-      </section>
-
-      <div class="space-y-6">
-        <section class="rounded-lg border border-[#3a3c42] bg-[#1a1b20] p-5 shadow-md">
-          {selectedProject() ? (
-            <>
-              <div class="flex flex-wrap items-center justify-between gap-3">
+        ) : (
+          visibleProjects.map((project) => (
+            <button
+              key={project.id}
+              type="button"
+              onClick={() => setSelectedProjectId(project.id)}
+              style={{
+                width: '100%',
+                textAlign: 'left',
+                borderRadius: '10px',
+                padding: '14px',
+                cursor: 'pointer',
+                border: 'none',
+                background: selectedProjectId === project.id ? 'rgba(224,104,24,0.1)' : '#26272c',
+                outline: selectedProjectId === project.id ? '1px solid #e06818' : '1px solid #3a3c42',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
                 <div>
-                  <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#d6a960]">Selected sample</p>
-                  <h3 class="mt-2 text-2xl font-bold text-[#f2f0ea]">{selectedProject()!.name}</h3>
+                  <p style={{ fontSize: '14px', fontWeight: 600, color: '#f2f0ea' }}>{project.name}</p>
+                  <p style={{ fontSize: '12px', color: '#8a8c93', marginTop: '2px' }}>{project.owner}</p>
                 </div>
-                <span
-                  class="rounded px-2 py-0.5 text-sm font-medium"
-                  style="background: rgba(58,60,66,0.4); color: #8a8c93; border: 1px solid #3a3c42;"
-                >
-                  {selectedProject()!.owner}
+                <span style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px', fontWeight: 600, ...statusColor(project.status) }}>
+                  {project.status}
                 </span>
               </div>
-              <p class="section-copy mt-4 text-[#8a8c93]">{selectedProject()!.nextStep}</p>
-
-              <div class="mt-6 space-y-3">
-                <For each={selectedTasks()}>
-                  {(task) => (
-                    <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
-                      <div class="flex flex-wrap items-center justify-between gap-3">
-                        <h4 class="font-semibold text-[#f2f0ea]">{task.title}</h4>
-                        <span class="rounded px-2 py-0.5 text-xs font-medium" style={taskStateBadgeStyle(task.state)}>
-                          {task.state}
-                        </span>
-                      </div>
-                      <div class="mt-3 flex flex-wrap gap-2 text-sm">
-                        <span
-                          class="rounded px-2 py-0.5 text-xs"
-                          style="background: rgba(58,60,66,0.4); color: #8a8c93; border: 1px solid #3a3c42;"
-                        >
-                          {task.lane}
-                        </span>
-                        <span
-                          class="rounded px-2 py-0.5 text-xs"
-                          style="background: rgba(58,60,66,0.4); color: #8a8c93; border: 1px solid #3a3c42;"
-                        >
-                          {task.priority} priority
-                        </span>
-                      </div>
-                    </article>
-                  )}
-                </For>
+              <p style={{ fontSize: '13px', color: '#8a8c93', marginTop: '8px', lineHeight: 1.6 }}>{project.summary}</p>
+              <div style={{ marginTop: '10px', height: '4px', background: '#3a3c42', borderRadius: '2px', overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: `${project.readiness}%`, background: '#e06818', borderRadius: '2px' }} />
               </div>
-            </>
-          ) : (
-            <EmptyState
-              title="Select a sample project to inspect the slice"
-              description="A starter should make room for project detail panels, modal entry points, and status-driven workflows."
-            />
-          )}
-        </section>
-
-        <section class="rounded-lg border border-[#3a3c42] bg-[#1a1b20] p-5 shadow-md">
-          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-[#d6a960]">Starter seam</p>
-          <h3 class="mt-2 text-xl font-bold text-[#f2f0ea]">Example data sources</h3>
-          <div class="mt-4 space-y-3">
-            <For each={props.dataBoundary.adapters}>
-              {(adapter) => (
-                <article class="rounded-md border border-[#3a3c42] bg-[#26272c] p-4">
-                  <div class="flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                      <h4 class="font-semibold text-[#f2f0ea]">{adapter.label}</h4>
-                      <p class="mt-1 text-sm text-[#8a8c93]">{adapter.description}</p>
-                    </div>
-                    <span
-                      class="rounded px-2 py-0.5 text-xs font-medium"
-                      style={
-                        adapter.status === 'ready'
-                          ? 'background: rgba(214,169,96,0.12); color: #d6a960; border: 1px solid rgba(214,169,96,0.3);'
-                          : 'background: rgba(248,223,102,0.1); color: #f8df66; border: 1px solid rgba(248,223,102,0.3);'
-                      }
-                    >
-                      {adapter.status}
-                    </span>
-                  </div>
-                  <div class="mt-3 flex flex-wrap gap-2 text-sm">
-                    <span
-                      class="rounded px-2 py-0.5 text-xs"
-                      style="background: rgba(58,60,66,0.4); color: #8a8c93; border: 1px solid #3a3c42;"
-                    >
-                      {adapter.kind}
-                    </span>
-                    <span
-                      class="rounded px-2 py-0.5 text-xs"
-                      style="background: rgba(58,60,66,0.4); color: #8a8c93; border: 1px solid #3a3c42;"
-                    >
-                      {props.dataBoundary.requestPolicy.status === 'configured'
-                        ? 'request policy configured'
-                        : 'starter request policy'}
-                    </span>
-                    <span
-                      class="rounded px-2 py-0.5 text-xs"
-                      style="background: rgba(58,60,66,0.4); color: #8a8c93; border: 1px solid #3a3c42;"
-                    >
-                      {props.dataBoundary.persistenceDriver} persistence
-                    </span>
-                  </div>
-                </article>
-              )}
-            </For>
-          </div>
-          <div class="mt-4">
-            <EmptyState
-              title="Adapters are starter examples until product services exist"
-              description="Use these seams for real API clients, repositories, and sync orchestration instead of wiring transport logic directly into feature views."
-            />
-          </div>
-        </section>
+              <p style={{ fontSize: '12px', color: '#8a8c93', marginTop: '4px' }}>Readiness {project.readiness}%</p>
+            </button>
+          ))
+        )}
       </div>
+
+      {/* Selected project detail */}
+      {selectedProject ? (
+        <Card style={{ background: '#1a1b20', border: '1px solid #3a3c42', margin: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px', marginBottom: '12px' }}>
+            <div>
+              <p style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.3em', color: '#d6a960' }}>Selected sample</p>
+              <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#f2f0ea', marginTop: '4px' }}>{selectedProject.name}</h3>
+            </div>
+            <span className="forge-badge-neutral" style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '12px' }}>{selectedProject.owner}</span>
+          </div>
+          <p style={{ fontSize: '13px', color: '#8a8c93', lineHeight: 1.75, marginBottom: '16px' }}>{selectedProject.nextStep}</p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {selectedTasks.map((task) => (
+              <div key={task.title} style={{ borderRadius: '8px', border: '1px solid #3a3c42', background: '#26272c', padding: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '8px' }}>
+                  <p style={{ fontSize: '13px', fontWeight: 600, color: '#f2f0ea' }}>{task.title}</p>
+                  <span style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px', fontWeight: 600, ...taskStateColor(task.state) }}>
+                    {task.state}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                  <span className="forge-badge-neutral" style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px' }}>{task.lane}</span>
+                  <span className="forge-badge-neutral" style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px' }}>{task.priority} priority</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      ) : (
+        <EmptyState
+          title="Select a sample project to inspect the slice"
+          description="A starter should make room for project detail panels, modal entry points, and status-driven workflows."
+        />
+      )}
+
+      {/* Data sources */}
+      <Card style={{ background: '#1a1b20', border: '1px solid #3a3c42', margin: 0 }}>
+        <p style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.3em', color: '#d6a960', marginBottom: '4px' }}>Starter seam</p>
+        <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#f2f0ea', marginBottom: '12px' }}>Example data sources</h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {dataBoundary.adapters.map((adapter) => (
+            <div key={adapter.label} style={{ borderRadius: '8px', border: '1px solid #3a3c42', background: '#26272c', padding: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '6px' }}>
+                <div>
+                  <p style={{ fontSize: '13px', fontWeight: 600, color: '#f2f0ea' }}>{adapter.label}</p>
+                  <p style={{ fontSize: '12px', color: '#8a8c93', marginTop: '2px' }}>{adapter.description}</p>
+                </div>
+                <span style={{
+                  borderRadius: '4px', padding: '2px 8px', fontSize: '11px', fontWeight: 600,
+                  ...(adapter.status === 'ready'
+                    ? { background: 'rgba(214,169,96,0.12)', color: '#d6a960', border: '1px solid rgba(214,169,96,0.3)' }
+                    : { background: 'rgba(248,223,102,0.1)', color: '#f8df66', border: '1px solid rgba(248,223,102,0.3)' }),
+                }}>
+                  {adapter.status}
+                </span>
+              </div>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                <span className="forge-badge-neutral" style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px' }}>{adapter.kind}</span>
+                <span className="forge-badge-neutral" style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px' }}>{dataBoundary.persistenceDriver} persistence</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: '12px' }}>
+          <EmptyState
+            title="Adapters are starter examples until product services exist"
+            description="Use these seams for real API clients, repositories, and sync orchestration instead of wiring transport logic directly into feature views."
+          />
+        </div>
+      </Card>
     </div>
   )
 }

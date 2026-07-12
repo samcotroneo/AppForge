@@ -1,23 +1,20 @@
-import type { JSX } from 'solid-js'
+import type { ReactNode } from 'react'
 
 type EmptyStateProps = {
   title: string
   description: string
-  children?: JSX.Element
+  children?: ReactNode
 }
 
-function EmptyState(props: EmptyStateProps) {
+function EmptyState({ title, description, children }: EmptyStateProps) {
   return (
-    <div class="rounded-lg border border-dashed border-[#3a3c42] bg-[#26272c]/70 p-6 text-sm text-[#8a8c93]">
-      <div
-        class="inline-block rounded px-2 py-0.5 text-xs font-semibold uppercase tracking-wide"
-        style="background: rgba(58,60,66,0.4); color: #8a8c93; border: 1px solid #3a3c42;"
-      >
+    <div style={{ borderRadius: '8px', border: '1px dashed #3a3c42', background: 'rgba(38,39,44,0.7)', padding: '24px', fontSize: '14px', color: '#8a8c93' }}>
+      <div className="forge-badge-neutral" style={{ display: 'inline-block', borderRadius: '4px', padding: '2px 8px', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
         Empty state
       </div>
-      <h3 class="mt-3 text-lg font-semibold text-[#f2f0ea]">{props.title}</h3>
-      <p class="mt-2 leading-7">{props.description}</p>
-      {props.children ? <div class="mt-4">{props.children}</div> : null}
+      <h3 style={{ marginTop: '12px', fontSize: '18px', fontWeight: 600, color: '#f2f0ea' }}>{title}</h3>
+      <p style={{ marginTop: '8px', lineHeight: 1.75 }}>{description}</p>
+      {children ? <div style={{ marginTop: '16px' }}>{children}</div> : null}
     </div>
   )
 }

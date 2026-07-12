@@ -1,29 +1,23 @@
-import { For } from 'solid-js'
+import { Card } from 'konsta/react'
 import { templateBlueprints } from './templateBlueprints'
 
 function BlueprintGrid() {
   return (
-    <div class="stack-grid">
-      <For each={templateBlueprints}>
-        {(blueprint) => (
-          <article class="card border border-base-300 bg-base-100 shadow-md">
-            <div class="card-body gap-4">
-              <h3 class="card-title">{blueprint.title}</h3>
-              <p class="text-sm leading-7 text-base-content/75">{blueprint.summary}</p>
-              <ul class="space-y-2 text-sm text-base-content/80">
-                <For each={blueprint.deliverables}>
-                  {(deliverable) => (
-                    <li class="flex gap-3">
-                      <span class="text-primary">✓</span>
-                      <span>{deliverable}</span>
-                    </li>
-                  )}
-                </For>
-              </ul>
-            </div>
-          </article>
-        )}
-      </For>
+    <div style={{ display: 'grid', gap: '12px' }}>
+      {templateBlueprints.map((blueprint) => (
+        <Card key={blueprint.title} style={{ background: '#1a1b20', border: '1px solid #3a3c42', margin: 0 }}>
+          <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#f2f0ea', marginBottom: '8px' }}>{blueprint.title}</h3>
+          <p style={{ fontSize: '13px', lineHeight: 1.75, color: '#8a8c93', marginBottom: '12px' }}>{blueprint.summary}</p>
+          <ul style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            {blueprint.deliverables.map((deliverable) => (
+              <li key={deliverable} style={{ display: 'flex', gap: '8px', fontSize: '13px', color: '#8a8c93' }}>
+                <span style={{ color: '#e06818' }}>✓</span>
+                <span>{deliverable}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      ))}
     </div>
   )
 }

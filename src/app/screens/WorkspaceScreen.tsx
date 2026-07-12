@@ -1,3 +1,4 @@
+import AppShell from '../../components/shell/AppShell'
 import SectionCard from '../../components/ui/SectionCard'
 import type { AppDataBoundary } from '../../lib/data'
 import ProjectBoard from '../../features/workbench/ProjectBoard'
@@ -9,17 +10,17 @@ type WorkspaceScreenProps = {
   dataBoundary: AppDataBoundary
 }
 
-function WorkspaceScreen(props: WorkspaceScreenProps) {
+function WorkspaceScreen({ projects, tasks, dataBoundary }: WorkspaceScreenProps) {
   return (
-    <div class="space-y-6">
+    <AppShell title="Workspace">
       <SectionCard
         eyebrow="Example feature"
         title="Sample workspace slice"
         description="This screen demonstrates how route composition can stay thin while example domain behavior lives inside a dedicated feature folder."
       >
-        <ProjectBoard projects={props.projects} tasks={props.tasks} dataBoundary={props.dataBoundary} />
+        <ProjectBoard projects={projects} tasks={tasks} dataBoundary={dataBoundary} />
       </SectionCard>
-    </div>
+    </AppShell>
   )
 }
 

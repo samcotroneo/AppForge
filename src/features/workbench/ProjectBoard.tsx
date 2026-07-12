@@ -128,7 +128,7 @@ function ProjectBoard({ projects, tasks, dataBoundary }: ProjectBoardProps) {
               <p style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.3em', color: '#d6a960' }}>Selected sample</p>
               <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#f2f0ea', marginTop: '4px' }}>{selectedProject.name}</h3>
             </div>
-            <span className="forge-badge-neutral" style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '12px' }}>{selectedProject.owner}</span>
+            <span style={{ borderRadius: "4px", padding: "2px 8px", fontSize: "12px", background: "rgba(58,60,66,0.4)", color: "#8a8c93", border: "1px solid #3a3c42" }}>{selectedProject.owner}</span>
           </div>
           <p style={{ fontSize: '13px', color: '#8a8c93', lineHeight: 1.75, marginBottom: '16px' }}>{selectedProject.nextStep}</p>
 
@@ -142,8 +142,8 @@ function ProjectBoard({ projects, tasks, dataBoundary }: ProjectBoardProps) {
                   </span>
                 </div>
                 <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                  <span className="forge-badge-neutral" style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px' }}>{task.lane}</span>
-                  <span className="forge-badge-neutral" style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px' }}>{task.priority} priority</span>
+                  <span style={{ borderRadius: "4px", padding: "2px 8px", fontSize: "11px", background: "rgba(58,60,66,0.4)", color: "#8a8c93", border: "1px solid #3a3c42" }}>{task.lane}</span>
+                  <span style={{ borderRadius: "4px", padding: "2px 8px", fontSize: "11px", background: "rgba(58,60,66,0.4)", color: "#8a8c93", border: "1px solid #3a3c42" }}>{task.priority} priority</span>
                 </div>
               </div>
             ))}
@@ -178,8 +178,8 @@ function ProjectBoard({ projects, tasks, dataBoundary }: ProjectBoardProps) {
                 </span>
               </div>
               <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                <span className="forge-badge-neutral" style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px' }}>{adapter.kind}</span>
-                <span className="forge-badge-neutral" style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px' }}>{dataBoundary.persistenceDriver} persistence</span>
+                <span style={{ borderRadius: "4px", padding: "2px 8px", fontSize: "11px", background: "rgba(58,60,66,0.4)", color: "#8a8c93", border: "1px solid #3a3c42" }}>{adapter.kind}</span>
+                <span style={{ borderRadius: "4px", padding: "2px 8px", fontSize: "11px", background: "rgba(58,60,66,0.4)", color: "#8a8c93", border: "1px solid #3a3c42" }}>{dataBoundary.persistenceDriver} persistence</span>
               </div>
             </div>
           ))}

@@ -1,4 +1,4 @@
-import { Block, Card, List, ListItem, Badge } from 'konsta/react'
+import { Block, Card, List, ListItem } from 'konsta/react'
 import AppShell from '../../components/shell/AppShell'
 import SectionCard from '../../components/ui/SectionCard'
 import StarterContractCard from '../../features/bootstrap/StarterContractCard'
@@ -22,13 +22,13 @@ function HomeScreen({ projects, summary, checklist, feedbackCount, foundationCou
     <AppShell title="Overview">
       {/* Hero */}
       <Block>
-        <div className="forge-glow" style={{ borderRadius: '12px', border: '1px solid #3a3c42', background: '#1a1b20', overflow: 'hidden', position: 'relative' }}>
+        <div style={{ borderRadius: '12px', border: '1px solid #3a3c42', background: '#1a1b20', overflow: 'hidden', position: 'relative', boxShadow: '0 0 24px 0 rgba(224, 104, 24, 0.15)' }}>
           <div style={{ position: 'absolute', inset: 0, opacity: 0.25, backgroundImage: "url('/appforge_background.png')", backgroundSize: 'cover', backgroundPosition: 'center' }} aria-hidden="true" />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(17,17,22,0.8), rgba(26,27,32,0.6), rgba(17,17,22,0.8))' }} aria-hidden="true" />
           <div style={{ position: 'relative', padding: '24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
               <img src="/appforge_emblem.png" alt="" aria-hidden="true" style={{ height: '48px', width: '48px' }} />
-              <span className="forge-badge" style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.25em' }}>
+              <span style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.25em', background: 'rgba(224,104,24,0.15)', color: '#e06818', border: '1px solid rgba(224,104,24,0.3)' }}>
                 Sample app
               </span>
             </div>
@@ -39,9 +39,9 @@ function HomeScreen({ projects, summary, checklist, feedbackCount, foundationCou
               Example routes, sample data, and replaceable scaffolding built with Ionic React and KonstaUI.
             </p>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '12px' }}>
-              <span className="forge-badge-neutral" style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px', fontWeight: 600 }}>Ionic React</span>
-              <span className="forge-badge-neutral" style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px', fontWeight: 600 }}>Capacitor</span>
-              <span className="forge-badge" style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px', fontWeight: 600 }}>PWA ready</span>
+              <span style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px', fontWeight: 600, background: 'rgba(58,60,66,0.4)', color: '#8a8c93', border: '1px solid #3a3c42' }}>Ionic React</span>
+              <span style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px', fontWeight: 600, background: 'rgba(58,60,66,0.4)', color: '#8a8c93', border: '1px solid #3a3c42' }}>Capacitor</span>
+              <span style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px', fontWeight: 600, background: 'rgba(224,104,24,0.15)', color: '#e06818', border: '1px solid rgba(224,104,24,0.3)' }}>PWA ready</span>
             </div>
           </div>
         </div>
@@ -88,9 +88,9 @@ function HomeScreen({ projects, summary, checklist, feedbackCount, foundationCou
               title={project.name}
               subtitle={project.owner}
               after={
-                <Badge colors={{ bg: 'bg-[#d6a960]/10' }} style={{ color: '#d6a960', border: '1px solid rgba(214,169,96,0.25)', fontSize: '11px' }}>
+                <span style={{ borderRadius: '4px', padding: '2px 8px', fontSize: '11px', fontWeight: 600, background: 'rgba(214,169,96,0.1)', color: '#d6a960', border: '1px solid rgba(214,169,96,0.25)' }}>
                   {project.status}
-                </Badge>
+                </span>
               }
             >
               <div slot="inner-end" />

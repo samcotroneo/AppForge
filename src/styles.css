@@ -53,39 +53,9 @@
   color-scheme: dark;
 }
 
-/* Brand helpers */
+/* Brand helper */
 .forge-glow {
   box-shadow: 0 0 24px 0 rgba(224, 104, 24, 0.15);
-}
-
-.forge-badge {
-  background: rgba(224, 104, 24, 0.15);
-  color: #e06818;
-  border: 1px solid rgba(224, 104, 24, 0.3);
-}
-
-.forge-badge-gold {
-  background: rgba(214, 169, 96, 0.12);
-  color: #d6a960;
-  border: 1px solid rgba(214, 169, 96, 0.25);
-}
-
-.forge-badge-blocked {
-  background: rgba(168, 56, 24, 0.12);
-  color: #a83818;
-  border: 1px solid rgba(168, 56, 24, 0.3);
-}
-
-.forge-badge-draft {
-  background: rgba(248, 223, 102, 0.1);
-  color: #f8df66;
-  border: 1px solid rgba(248, 223, 102, 0.3);
-}
-
-.forge-badge-neutral {
-  background: rgba(58, 60, 66, 0.4);
-  color: #8a8c93;
-  border: 1px solid #3a3c42;
 }
 
 ion-tab-bar {

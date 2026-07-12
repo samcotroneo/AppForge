@@ -1,3 +1,4 @@
+import type React from 'react'
 import { Card, List, ListItem } from 'konsta/react'
 import AppShell from '../../components/shell/AppShell'
 import ErrorState from '../../components/feedback/ErrorState'
@@ -17,6 +18,10 @@ const statusColor: Record<EnvStatus, string> = {
   enabled: '#e06818',
   disabled: '#8a8c93',
 }
+
+const NATIVE_PLATFORM_COMMANDS = ['npx cap add android', 'npx cap add ios'] as const
+
+const neutralBadge: React.CSSProperties = { borderRadius: '4px', padding: '2px 8px', background: 'rgba(58,60,66,0.4)', color: '#8a8c93', border: '1px solid #3a3c42' }
 
 function SettingsScreen({ blockedTaskCount, foundation, portfolioProjectCount }: SettingsScreenProps) {
   return (
@@ -126,8 +131,8 @@ function SettingsScreen({ blockedTaskCount, foundation, portfolioProjectCount }:
           description="Use reminders like this to point developers toward platform steps that still need real app-specific work."
         >
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', fontSize: '12px', color: '#8a8c93' }}>
-            {(['npx cap add android', 'npx cap add ios'] as const).map((cmd) => (
-              <span key={cmd} className="forge-badge-neutral" style={{ borderRadius: '4px', padding: '2px 8px', fontFamily: 'monospace' }}>{cmd}</span>
+            {NATIVE_PLATFORM_COMMANDS.map((cmd) => (
+              <span key={cmd} style={{ ...neutralBadge, borderRadius: '4px', padding: '2px 8px', fontFamily: 'monospace' }}>{cmd}</span>
             ))}
             {foundation.platform.capabilities.map((capability) => (
               <span
